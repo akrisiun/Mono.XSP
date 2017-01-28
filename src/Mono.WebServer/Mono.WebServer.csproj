@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -11,17 +11,20 @@
     <AssemblyName>Mono.WebServer</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>..\..\lib\</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -31,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-3.5|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -42,22 +46,29 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <WarningLevel>4</WarningLevel>
     <Optimize>false</Optimize>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release-3.5|AnyCPU'">
     <OutputPath>bin\Release-3.5\</OutputPath>
     <Optimize>true</Optimize>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DebugType>none</DebugType>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Mono.Posix">
+      <HintPath>..\..\Packages\Mono.Posix.4.0.0.0\lib\net40\Mono.Posix.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>..\..\Packages\Mono.Security.3.2.3.0\lib\net45\Mono.Security.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Web" />
     <Reference Include="System.Configuration" />
-    <Reference Include="Mono.Posix" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -68,6 +79,7 @@
     <Compile Include="FinePlatformID.cs" />
     <Compile Include="HttpErrors.cs" />
     <Compile Include="IApplicationHost.cs" />
+    <Compile Include="IdentityToken.cs" />
     <Compile Include="InitialWorkerRequest.cs" />
     <Compile Include="IRequestBroker.cs" />
     <Compile Include="LingeringNetworkStream.cs" />
@@ -78,11 +90,11 @@
     <Compile Include="MapPathEventArgs.cs" />
     <Compile Include="MapPathEventHandler.cs" />
     <Compile Include="MonoWorkerRequest.cs" />
+    <Compile Include="Options\ConfigurationManager.cs" />
     <Compile Include="Options\ConfigurationManagerExtensions.cs" />
     <Compile Include="Options\ConfigurationManager.Fields.cs" />
     <Compile Include="Options\IHelpConfigurationManager.cs" />
     <Compile Include="Options\ServerConfigurationManager.cs" />
-    <Compile Include="Options\ConfigurationManager.cs" />
     <Compile Include="Options\Options.cs" />
     <Compile Include="Options\Descriptions.cs" />
     <Compile Include="Paths.cs" />
@@ -93,6 +105,7 @@
     <Compile Include="UnregisterRequestEventArgs.cs" />
     <Compile Include="UnregisterRequestEventHandler.cs" />
     <Compile Include="Version.cs" />
+    <Compile Include="ZSystemWeb.cs" />
     <Compile Include="VPathToHost.cs" />
     <Compile Include="WebSource.cs" />
     <Compile Include="Worker.cs" />
@@ -100,7 +113,6 @@
     <Compile Include="Log\FileLogger.cs" />
     <Compile Include="Log\ILogger.cs" />
     <Compile Include="AssemblyInfo4.cs" />
-    <Compile Include="IdentityToken.cs" />
     <Compile Include="Options\Settings\BoolSetting.cs" />
     <Compile Include="Options\Settings\Int32Setting.cs" />
     <Compile Include="Options\Settings\EnumSetting.cs" />
@@ -116,7 +128,5 @@
     <Compile Include="Options\Settings\SettingSource.cs" />
     <Compile Include="Options\Settings\Parser.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Options\Settings\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

@@ -68,7 +68,12 @@ namespace Mono.WebServer.XSP
 
 		internal static CompatTuple<int, string, ApplicationServer> DebugMain (string [] args)
 		{
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            Console.WriteLine("Debug?");
+            Console.Read();
+            if (Debugger.IsAttached)
+                Debugger.Break();
+
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 			bool quiet = false;
 			while (true) {
 				try {
@@ -166,8 +171,9 @@ namespace Mono.WebServer.XSP
 				vh.CreateHost (server, webSource);
 				var svr = (Server) vh.AppHost.Domain.CreateInstanceAndUnwrap (GetType ().Assembly.GetName ().ToString (), GetType ().FullName);
 				webSource.Dispose ();
-				return svr.DebugMain (args, false, vh.AppHost, configurationManager.Quiet);
-			}
+				var debugSvr = svr.DebugMain (args, false, vh.AppHost, configurationManager.Quiet);
+                return debugSvr;
+            }
 			server.AppHost = ext_apphost;
 
 			if (!configurationManager.Quiet) {
@@ -192,10 +198,13 @@ namespace Mono.WebServer.XSP
 						Console.WriteLine ("Hit Return to stop the server.");
 
 					while (true) {
-						bool doSleep;
+						bool doSleep = false;
 						try {
-							Console.ReadLine ();
-							break;
+                            // Console.ReadLine ();
+                            ConsoleKeyInfo key = Console.ReadKey();
+
+                            if (key.KeyChar == (char)13)
+                                break;
 						} catch (IOException) {
 							// This might happen on appdomain unload
 							// until the previous threads are terminated.

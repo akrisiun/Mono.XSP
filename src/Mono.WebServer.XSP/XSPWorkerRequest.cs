@@ -134,7 +134,35 @@ namespace Mono.WebServer
 			indexFiles = SplitAndTrim (list);
 		}
 
-		public XSPWorkerRequest (int requestId,
+        public static XSPWorkerRequest Create(int requestId,
+                                 XSPRequestBroker requestBroker,
+                                 IApplicationHost appHost,
+                                 EndPoint localEP, EndPoint remoteEP,
+                                 string verb, string path,
+                                 string queryString, string protocol,
+                                 byte[] inputBuffer, IntPtr socket,
+                                 bool secure)
+        {
+            XSPWorkerRequest req = null;
+            var monoHost = appHost as Mono.WebServer.XSPApplicationHost;
+
+            try {
+                AppDomain.CurrentDomain.SetData(BaseApplicationHost.appVPath, path);
+                System.Web.Hosting.CheckWorker.Request(appHost);
+
+                req = new XSPWorkerRequest(requestId, requestBroker, appHost, localEP, remoteEP, verb, path,
+                    queryString, protocol, inputBuffer, socket, secure);
+
+                AppDomain.CurrentDomain.SetData(BaseApplicationHost.appPath, path);
+
+            } catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+            }
+            return req;
+        }
+
+        public XSPWorkerRequest (int requestId,
 		                         XSPRequestBroker requestBroker,
 		                         IApplicationHost appHost,
 		                         EndPoint localEP, EndPoint remoteEP,
@@ -152,14 +180,20 @@ namespace Mono.WebServer
 			rawUrl = path;
 			if (!String.IsNullOrEmpty (queryString))
 				rawUrl += "?" + queryString;
+
 			try {
 				Paths.GetPathsFromUri (appHost, verb, path, out this.path, out pathInfo);
-			} catch {
-				CloseConnection ();
-				throw;
-			}
-			
-			this.protocol = protocol;
+			} catch (Exception ex) 
+            {
+#if !UNIX
+                Console.WriteLine(ex.Message);
+#else
+                CloseConnection();
+                throw;
+#endif
+            }
+
+            this.protocol = protocol;
 			if (protocol == "HTTP/1.1") {
 				if (!running_tests)
 					this.protocol = "HTTP/1.0";
@@ -705,9 +739,11 @@ namespace Mono.WebServer
 					// shortcut to what the base overload does here.
 					SendFromStream (fs, offset, length);
 				} else {
-					SendResponseFromFile (fs.Handle, offset, length);
-				}
-			}
+#pragma warning disable CS0618
+                    SendResponseFromFile (fs.Handle, offset, length);
+#pragma warning restore CS0618
+                }
+            }
 		}
 
 		public override void SendResponseFromFile (IntPtr handle, long offset, long length)

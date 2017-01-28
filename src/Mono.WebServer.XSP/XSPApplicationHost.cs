@@ -60,9 +60,18 @@ namespace Mono.WebServer
 		{
 			var broker = (XSPRequestBroker) RequestBroker;
 			bool secure = (ssl != null);
-			var mwr = new XSPWorkerRequest (reqId, broker, this,
-				localEP, remoteEP, verb, path, queryString,
-				protocol, inputBuffer, socket, secure);
+
+            XSPWorkerRequest mwr = null;
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+
+                AppDomain.CurrentDomain.SetData(".appVPath", path);
+                mwr = XSPWorkerRequest.Create(reqId, broker, this,
+                        localEP, remoteEP, verb, path, queryString,
+                        protocol, inputBuffer, socket, secure);
+            } else
+                mwr = new XSPWorkerRequest(reqId, broker, this,
+                        localEP, remoteEP, verb, path, queryString,
+                        protocol, inputBuffer, socket, secure);
 
 			if (secure) {
 				// note: we're only setting what we use (and not the whole lot)
@@ -96,7 +105,11 @@ namespace Mono.WebServer
 				}
 			}
 
-			string translated = mwr.GetFilePathTranslated ();
+            string translated = null;
+            try {
+                translated = mwr.GetFilePathTranslated();
+            } catch (Exception ex) { Console.WriteLine(ex.Message); }
+
 			if (path [path.Length - 1] != '/' && Directory.Exists (translated))
 				redirect = path + '/';
 

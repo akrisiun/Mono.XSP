@@ -28,7 +28,7 @@
 
 using NUnit.Framework;
 using System;
-using Mono.WebServer.Apache;
+//using Mono.WebServer.Apache;
 using System.IO;
 
 namespace Mono.WebServer.Test {
@@ -42,13 +42,17 @@ namespace Mono.WebServer.Test {
 				Assert.Fail ("This is not the correct chroot");
 			string temp_dir = Path.GetTempPath ();
 
+
+#if UNIX
 			string final_vdir;
 			string final_pdir;
+            ModMonoWorker.GetPhysicalDirectory (temp_dir, temp_dir, out final_vdir, out final_pdir);
+#else
+            throw new NotImplementedException("no Unix");
+#endif
+        }
 
-			ModMonoWorker.GetPhysicalDirectory (temp_dir, temp_dir, out final_vdir, out final_pdir);
-		}
-
-		static void AppendSeparator (ref string nested_dir)
+        static void AppendSeparator (ref string nested_dir)
 		{
 			if (!nested_dir.EndsWith (Path.DirectorySeparatorChar.ToString (), StringComparison.Ordinal))
 				nested_dir += Path.DirectorySeparatorChar;

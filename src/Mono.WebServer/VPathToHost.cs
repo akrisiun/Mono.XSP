@@ -31,123 +31,136 @@
 using System;
 using System.Web.Hosting;
 using System.Globalization;
+using System.IO;
+using System.Runtime.Remoting;
+using System.Diagnostics;
 
 namespace Mono.WebServer
 {
-	public class VPathToHost
-	{
-		public readonly string vhost;
-		public readonly int vport;
-		public readonly string vpath;
-		public string realPath;
-		public readonly bool haveWildcard;
-		public IApplicationHost AppHost;
-		public IRequestBroker RequestBroker;
+    public class VPathToHost
+    {
+        public readonly string vhost;
+        public readonly int vport;
+        public readonly string vpath;
+        public string realPath;
+        public readonly bool haveWildcard;
+        public IApplicationHost AppHost;
+        public IRequestBroker RequestBroker;
 
-		public VPathToHost (string vhost, int vport, string vpath, string realPath)
-		{
-			this.vhost = (vhost != null) ? vhost.ToLower (CultureInfo.InvariantCulture) : null;
-			this.vport = vport;
-			this.vpath = vpath;
-			if (String.IsNullOrEmpty (vpath) || vpath [0] != '/')
-				throw new ArgumentException ("Virtual path must begin with '/': " + vpath,
-							     "vpath");
+        public VPathToHost(string vhost, int vport, string vpath, string realPath)
+        {
+            this.vhost = (vhost != null) ? vhost.ToLower(CultureInfo.InvariantCulture) : null;
+            this.vport = vport;
+            this.vpath = vpath;
+            if (String.IsNullOrEmpty(vpath) || vpath[0] != '/')
+                throw new ArgumentException("Virtual path must begin with '/': " + vpath,
+                                 "vpath");
 
-			this.realPath = realPath;
-			AppHost = null;
-			if (vhost != null && this.vhost.Length != 0 && this.vhost [0] == '*') {
-				haveWildcard = true;
-				if (this.vhost.Length > 2 && this.vhost [1] == '.')
-					this.vhost = this.vhost.Substring (2);
-			}
-		}
+            this.realPath = realPath;
+            AppHost = null;
+            if (vhost != null && this.vhost.Length != 0 && this.vhost[0] == '*') {
+                haveWildcard = true;
+                if (this.vhost.Length > 2 && this.vhost[1] == '.')
+                    this.vhost = this.vhost.Substring(2);
+            }
+        }
 
-		public bool TryClearHost (IApplicationHost host)
-		{
-			if (AppHost == host) {
-				AppHost = null;
-				return true;
-			}
+        public bool TryClearHost(IApplicationHost host)
+        {
+            if (AppHost == host) {
+                AppHost = null;
+                return true;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		public void UnloadHost ()
-		{
-			if (AppHost != null)
-				AppHost.Unload ();
+        public void UnloadHost()
+        {
+            if (AppHost != null)
+                AppHost.Unload();
 
-			AppHost = null;
-		}
+            AppHost = null;
+        }
 
-		public bool Redirect (string path, out string redirect)
-		{
-			redirect = null;
-			if (path.Length == vpath.Length - 1) {
-				redirect = vpath;
-				return true;
-			}
+        public bool Redirect(string path, out string redirect)
+        {
+            redirect = null;
+            if (path.Length == vpath.Length - 1) {
+                redirect = vpath;
+                return true;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		public bool Match (string vhost, int vport, string vpath)
-		{
-			if (vport != -1 && this.vport != -1 && vport != this.vport)
-				return false;
+        public bool Match(string vhost, int vport, string vpath)
+        {
+            if (vport != -1 && this.vport != -1 && vport != this.vport)
+                return false;
 
-			if (vpath == null)
-				return false;
+            if (vpath == null)
+                return false;
 
-			if (vhost != null && this.vhost != null && this.vhost != "*") {
-				int length = this.vhost.Length;
-				string lwrvhost = vhost.ToLower (CultureInfo.InvariantCulture);
-				if (haveWildcard) {
-					if (length > vhost.Length)
-						return false;
+            if (vhost != null && this.vhost != null && this.vhost != "*") {
+                int length = this.vhost.Length;
+                string lwrvhost = vhost.ToLower(CultureInfo.InvariantCulture);
+                if (haveWildcard) {
+                    if (length > vhost.Length)
+                        return false;
 
-					if (length == vhost.Length && this.vhost != lwrvhost)
-						return false;
+                    if (length == vhost.Length && this.vhost != lwrvhost)
+                        return false;
 
-					if (vhost [vhost.Length - length - 1] != '.')
-						return false;
+                    if (vhost[vhost.Length - length - 1] != '.')
+                        return false;
 
-					if (!lwrvhost.EndsWith (this.vhost))
-						return false;
+                    if (!lwrvhost.EndsWith(this.vhost))
+                        return false;
 
-				} else if (this.vhost != lwrvhost) {
-					return false;
-				}
-			}
+                } else if (this.vhost != lwrvhost) {
+                    return false;
+                }
+            }
 
-			int local = vpath.Length;
-			int vlength = this.vpath.Length;
-			if (vlength > local) {
-				// Check for /xxx requests to be redirected to /xxx/
-				if (this.vpath [vlength - 1] != '/')
-					return false;
+            int local = vpath.Length;
+            int vlength = this.vpath.Length;
+            if (vlength > local) {
+                // Check for /xxx requests to be redirected to /xxx/
+                if (this.vpath[vlength - 1] != '/')
+                    return false;
 
-				return (vlength - 1 == local && this.vpath.Substring (0, vlength - 1) == vpath);
-			}
+                return (vlength - 1 == local && this.vpath.Substring(0, vlength - 1) == vpath);
+            }
 
-			return (vpath.StartsWith (this.vpath));
-		}
+            return (vpath.StartsWith(this.vpath));
+        }
 
-		public void CreateHost (ApplicationServer server, WebSource webSource)
-		{
-			string v = vpath;
-			if (v != "/" && v.EndsWith ("/")) {
-				v = v.Substring (0, v.Length - 1);
-			}
+        public void CreateHost(ApplicationServer server, WebSource webSource)
+        {
+            string v = vpath;
+            if (v != "/" && v.EndsWith("/")) {
+                v = v.Substring(0, v.Length - 1);
+            }
 
-			AppHost = ApplicationHost.CreateApplicationHost (webSource.GetApplicationHostType(), v, realPath) as IApplicationHost;
-			AppHost.Server = server;
-			
-			if (!server.SingleApplication) {
-				// Link the host in the application domain with a request broker in the main domain
-				RequestBroker = webSource.CreateRequestBroker ();
-				AppHost.RequestBroker = RequestBroker;
-			}
-		}
-	}
+            Exception loadError = null;
+            try {
+                var type = webSource.GetApplicationHostType();
+                AppHost = WebCreateHost.Create(type, v, realPath) as IApplicationHost;
+            } catch (Exception ex) {
+                loadError = ex;
+                Console.WriteLine(ex.Message);
+            }
+
+            //  ApplicationHost.CreateApplicationHost(
+                // webSource.GetApplicationHostType(), v, realPath) as IApplicationHost;
+            AppHost.Server = server;
+
+            if (!server.SingleApplication) {
+                // Link the host in the application domain with a request broker in the main domain
+                RequestBroker = webSource.CreateRequestBroker();
+                AppHost.RequestBroker = RequestBroker;
+            }
+        }
+    }
 }

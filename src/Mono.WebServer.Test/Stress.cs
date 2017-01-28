@@ -33,7 +33,10 @@ using System.Threading;
 using System.Net.Sockets;
 using System.IO;
 
-namespace Mono.WebServer.Test {
+namespace Mono.WebServer.Test
+{
+
+
 	[TestFixture]
 	public class Stress
 	{

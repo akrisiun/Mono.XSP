@@ -33,3 +33,7 @@ shim/shimtest
 shim/shim-shim.o
 shim/.deps
 Packages/
+*.nupkg
+.vs*/
+src/bin/XSP.exe.config
+src/bin/XSP.vshost.exe.*

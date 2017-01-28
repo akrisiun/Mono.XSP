@@ -41,14 +41,20 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Web;
-using System.Web.Hosting;
 using Mono.WebServer.Log;
 
 namespace Mono.WebServer
-{	
-	public abstract class MonoWorkerRequest : SimpleWorkerRequest
-	{
-		const string DEFAULT_EXCEPTION_HTML = "<html><head><title>Runtime Error</title></head><body>An exception ocurred:<pre>{0}</pre></body></html>";
+{
+#if !UNIX
+    public abstract class MonoWorkerRequest : HttpWorkerRequest
+#else
+
+    using System.Web.Hosting;
+
+    public abstract class MonoWorkerRequest : SimpleWorkerRequest
+#endif
+    {
+        const string DEFAULT_EXCEPTION_HTML = "<html><head><title>Runtime Error</title></head><body>An exception ocurred:<pre>{0}</pre></body></html>";
 		static readonly char[] mapPathTrimStartChars = { '/' };
 
 		static bool checkFileAccess = true;
@@ -168,13 +174,22 @@ namespace Mono.WebServer
 			}
 		}
 
-		protected MonoWorkerRequest (IApplicationHost appHost)
+#if UNIX
+        protected MonoWorkerRequest (IApplicationHost appHost)
 			: base (String.Empty, String.Empty, null)
 		{
 			if (appHost == null)
 				throw new ArgumentNullException ("appHost");
+#else
+        // Windows
+        protected MonoWorkerRequest(IApplicationHost appHost)
+            : base() // (String.Empty, String.Empty, null)
+        {
+            if (appHost == null)
+                throw new ArgumentNullException("appHost");
+#endif
 
-			appHostBase = appHost;
+            appHostBase = appHost;
 		}
 
 		public override string GetAppPath ()
@@ -383,24 +398,40 @@ namespace Mono.WebServer
 		public void ProcessRequest ()
 		{
 			string error = null;
+            Exception exLast = null;
 			inUnhandledException = false;
-			
-			try {
+
+            try {
 				AssertFileAccessible ();
-				HttpRuntime.ProcessRequest (this);
-			} catch (HttpException ex) {
+#if UNIX
+                HttpRuntime.ProcessRequest (this);
+#else
+                System.Web.HttpContext.Current = null;
+                System.Web.Hosting.CheckWorker.ProcessRequest(this);
+#endif
+
+            }
+            catch (HttpException ex) {
 				inUnhandledException = true;
-				error = ex.GetHtmlErrorMessage ();
+                exLast = ex;
+                error = ex.GetHtmlErrorMessage ();
 			} catch (Exception ex) {
 				inUnhandledException = true;
 				var hex = new HttpException (400, "Bad request", ex);
 				error = hex.GetHtmlErrorMessage ();
-			}
+                exLast = hex;
+            }
 
 			if (!inUnhandledException)
 				return;
-			
-			if (error.Length == 0)
+
+            error = error ?? exLast.Message;
+            if (exLast.InnerException != null) {
+                error += "<br>" + exLast.InnerException.Message;
+                error += "<br>" + exLast.InnerException.StackTrace;
+            }
+
+            if (error.Length == 0)
 				error = String.Format (DEFAULT_EXCEPTION_HTML, "Unknown error");
 
 			try {
@@ -421,7 +452,10 @@ namespace Mono.WebServer
 				Logger.Write (ex);
 				throw;
 			}
-		}
+
+            // Clear on finish ??
+            // System.Web.HttpContext.Current = null;
+        }
 
 		public override void EndOfRequest ()
 		{
@@ -430,9 +464,12 @@ namespace Mono.WebServer
 
 			if (end_send != null)
 				end_send (this, end_send_data);
-		}		
 
-		public override void SetEndOfSendNotification (EndOfSendNotification callback, object extraData)
+            // Clear on finish
+            System.Web.HttpContext.Current = null;
+        }
+
+        public override void SetEndOfSendNotification (EndOfSendNotification callback, object extraData)
 		{
 			end_send = callback;
 			end_send_data = extraData;
@@ -554,7 +591,7 @@ namespace Mono.WebServer
 			server_variables.Add (name, value);
 		}
 
-		#region Client Certificate Support
+#region Client Certificate Support
 
 		public X509Certificate ClientCertificate {
 			get {
@@ -610,7 +647,7 @@ namespace Mono.WebServer
 			return DateTime.Parse (ClientCertificate.GetExpirationDateString ());
 		}
 		
-		#endregion
+#endregion
 
 		protected static string[] SplitAndTrim (string list)
 		{

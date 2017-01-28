@@ -40,7 +40,7 @@ namespace Mono.WebServer
 		{
 			// There's a hidden missing feature here... :)
 			realUri = uri; pathInfo = String.Empty;
-			string vpath = HttpRuntime.AppDomainAppVirtualPath;
+            string vpath = HttpRuntime.AppDomainAppVirtualPath ?? appHost.VPath; // Environment.CurrentDirectory;
 			int vpathLen = vpath.Length;
 			
 			if (vpath [vpathLen - 1] != '/')
@@ -75,7 +75,10 @@ namespace Mono.WebServer
 
 		static bool VirtualPathExists (IApplicationHost appHost, string verb, string uri)
 		{
-			if (appHost.IsHttpHandler (verb, uri))
+            if (appHost.AppDomainAppVirtualPath == null)
+                appHost.AppDomainAppVirtualPath = appHost.VPath;
+
+            if (appHost.IsHttpHandler (verb, uri))
 				return true;
 
 			VirtualPathProvider vpp = HostingEnvironment.VirtualPathProvider;

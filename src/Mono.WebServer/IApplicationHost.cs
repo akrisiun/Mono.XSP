@@ -35,14 +35,16 @@ using System;
 
 namespace Mono.WebServer
 {
-	public interface IApplicationHost
-	{
-		string Path { get; }
-		string VPath { get; }
-		AppDomain Domain { get; }
-		IRequestBroker RequestBroker { get; set; }
-		ApplicationServer Server { get; set; }
-		void Unload ();
-		bool IsHttpHandler (string verb, string uri);
-	}
+    public interface IApplicationHost
+    {
+        string Path { get; }
+        string VPath { get; }
+        AppDomain Domain { get; }
+        IRequestBroker RequestBroker { get; set; }
+        ApplicationServer Server { get; set; }
+        void Unload();
+        bool IsHttpHandler(string verb, string uri);
+
+        string AppDomainAppVirtualPath { get; set; }
+    }
 }

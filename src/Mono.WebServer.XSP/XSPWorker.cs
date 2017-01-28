@@ -199,8 +199,12 @@ namespace Mono.WebServer.XSP
 				// This is ok (including EndOfStreamException)
 			} catch (Exception e) {
 				Logger.Write (e);
-			}
-		}
+#if !UNIX
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+#endif
+            }
+        }
 
 		public override int Read (byte[] buffer, int position, int size)
 		{
