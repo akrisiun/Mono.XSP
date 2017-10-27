@@ -346,11 +346,11 @@ namespace Mono.FastCgi {
 		
 		bool input_data_completed;
 
-		[Obsolete]
-		public void AddInputData (Record record)
-		{
-			AddInputData ((NRecord)record);
-		}
+		//[Obsolete]
+		//public void AddInputData (Record record)
+		//{
+		//	AddInputData ((NRecord)record);
+		//}
 
 		internal void AddInputData (NRecord record)
 		{
@@ -384,11 +384,11 @@ namespace Mono.FastCgi {
 		
 		bool file_data_completed;
 
-		[Obsolete]
-		public void AddFileData (Record record)
-		{
-			AddFileData ((NRecord)record);
-		}
+		//[Obsolete]
+		//public void AddFileData (Record record)
+		//{
+		//	AddFileData ((NRecord)record);
+		//}
 
 		internal void AddFileData (NRecord record)
 		{
@@ -530,11 +530,11 @@ namespace Mono.FastCgi {
 	{
 		readonly NRecord record;
 
-		[Obsolete]
-		public DataReceivedArgs (Record record)
-		{
-			this.record = (NRecord)record;
-		}
+		//[Obsolete]
+		//public DataReceivedArgs (Record record)
+		//{
+		//	this.record = (NRecord)record;
+		//}
 
 		internal DataReceivedArgs(NRecord record)
 		{

@@ -1,5 +1,4 @@
 Makefile
-Makefile.in
 /aclocal.m4
 /autom4te.cache/
 /config.guess
@@ -7,18 +6,11 @@ Makefile.in
 /config.status
 /config.sub
 /configure
-/install-sh
 /missing
 *.mdb
-*.dll
+*.pdb
 *.exe
 build/m4/*
-reautogen.sh
-depcomp
-libtool
-ltmain.sh
-xsp.spec
-xsp.userprefs
 src/*/bin
 src/*/obj
 xsp.v11.suo

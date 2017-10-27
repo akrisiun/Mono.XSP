@@ -34,7 +34,8 @@ namespace Mono.WebServer.FastCgi
 	{
 		readonly IGenericServer<T> backend;
 
-		public event EventHandler RequestReceived;
+#pragma warning disable CS0067
+        public event EventHandler RequestReceived;
 
 		public FakeGenericServer (IGenericServer<T> server)
 		{

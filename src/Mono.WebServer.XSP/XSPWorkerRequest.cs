@@ -705,7 +705,7 @@ namespace Mono.WebServer
 					// shortcut to what the base overload does here.
 					SendFromStream (fs, offset, length);
 				} else {
-					SendResponseFromFile (fs.Handle, offset, length);
+					SendResponseFromFile (fs.SafeFileHandle.DangerousGetHandle(), offset, length);
 				}
 			}
 		}

@@ -43,6 +43,8 @@ using System.Text;
 using System.Web;
 using System.Web.Hosting;
 using Mono.WebServer.Log;
+using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
 namespace Mono.WebServer
 {	
@@ -491,7 +493,7 @@ namespace Mono.WebServer
 		{
 			Stream file = null;
 			try {
-				file = new FileStream (handle, FileAccess.Read);
+				file = new FileStream (new SafeFileHandle(handle, true), FileAccess.Read);
 				SendFromStream (file, offset, length);
 			} finally {
 				if (file != null)
