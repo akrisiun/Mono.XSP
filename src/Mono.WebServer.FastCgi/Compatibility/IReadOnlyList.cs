@@ -26,7 +26,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#if !NET_4_5
+#if !NET_4_5 && !NET_4_6
 
 namespace System.Collections.Generic
 {

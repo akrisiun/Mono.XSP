@@ -54,21 +54,7 @@ namespace Mono.WebServer {
 			configurationManager.ImportSettings (doc, false);
 		}
 
-		public bool Contains (string name)
-		{
-			return configurationManager.Contains (name);
-		}
-
-		[Obsolete]
-		public object this [string name] {
-			get {
-				return configurationManager.GetSetting (name).Value;
-			}
-			
-			set {
-				configurationManager.SetValue (name, value);
-			}
-		}
+		// public bool Contains (string name) => configurationManager.Contains (name);
 
 		public void PrintHelp ()
 		{

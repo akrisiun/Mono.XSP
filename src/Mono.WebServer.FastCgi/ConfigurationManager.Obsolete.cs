@@ -34,22 +34,6 @@ using Mono.WebServer.Options;
 namespace Mono.WebServer.FastCgi {
 	public partial class ConfigurationManager : ServerConfigurationManager 
 	{
-		[Obsolete]
-		internal void SetValue (string name, object value)
-		{
-			Settings[name].MaybeParseUpdate (SettingSource.CommandLine, value.ToString ());
-		}
-
-		[Obsolete]
-		internal ISetting GetSetting (string name)
-		{
-			return Settings [name];
-		}
-
-		[Obsolete]
-		internal bool Contains (string name)
-		{
-			return Settings.Contains (name);
-		}
+	  
 	}
 }

@@ -27,6 +27,7 @@
 //
 
 using System;
+#if TEST
 using Mono.WebServer.XSP;
 using Mono.FastCgi;
 using System.IO;
@@ -44,7 +45,7 @@ namespace Mono.WebServer.Test {
 		public static void LoadAssemblies ()
 		{
 			// Force loading of the XSP assembly
-			new SecurityConfiguration ();
+			// new SecurityConfiguration ();
 			// FastCgi
 			new NameValuePair ();
 			// and the WebServer one
@@ -93,3 +94,4 @@ namespace Mono.WebServer.Test {
 	}
 }
 
+#endif

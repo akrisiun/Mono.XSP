@@ -26,4 +26,14 @@ shim/shim-shim.o
 shim/.deps
 Packages/
 .vs*/
+*.log
 *.nupkg
+compile
+depcomp
+*.zip
+*.exe
+Makefile.in
+*.spec
+docs-stamp
+*.tree
+*.pc

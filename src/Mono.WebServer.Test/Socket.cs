@@ -35,7 +35,8 @@ using Mono.WebServer.FastCgi;
 using NUnit.Framework;
 
 namespace Mono.WebServer.Test {
-	[TestFixture]
+	
+	// [TestFixture]
 	public class SocketTest
 	{
 		const string FASTCGI_SOCKET_PATH = "\0fastcgi";

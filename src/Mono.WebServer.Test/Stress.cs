@@ -34,15 +34,18 @@ using System.Net.Sockets;
 using System.IO;
 
 namespace Mono.WebServer.Test {
-	[TestFixture]
+	
+	// [TestFixture]
 	public class Stress
 	{
 		[SetUp]
 		public void Init ()
 		{
+			/* TODO
 			Utilities.LoadAssemblies ();
 			Utilities.CopyLoadedAssemblies ();
 			Utilities.SetLogToFail ();
+			*/
 		}
 
 		[Test]

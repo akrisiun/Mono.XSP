@@ -28,6 +28,8 @@
 
 using NUnit.Framework;
 using System;
+#if APACHE 
+
 using Mono.WebServer.Apache;
 using System.IO;
 
@@ -45,7 +47,7 @@ namespace Mono.WebServer.Test {
 			string final_vdir;
 			string final_pdir;
 
-			ModMonoWorker.GetPhysicalDirectory (temp_dir, temp_dir, out final_vdir, out final_pdir);
+			// ModMonoWorker.GetPhysicalDirectory (temp_dir, temp_dir, out final_vdir, out final_pdir);
 		}
 
 		static void AppendSeparator (ref string nested_dir)
@@ -56,3 +58,4 @@ namespace Mono.WebServer.Test {
 	}
 }
 
+#endif

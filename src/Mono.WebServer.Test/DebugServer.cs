@@ -27,10 +27,13 @@
 //
 
 using System;
-using Mono.WebServer.XSP;
 
 namespace Mono.WebServer.Test
 {
+#if TEST
+using Mono.WebServer.XSP;
+#endif
+
 	public class DebugServer : IDisposable
 	{
 		ApplicationServer server;
@@ -43,9 +46,15 @@ namespace Mono.WebServer.Test
 
 		public int Run ()
 		{
-			CompatTuple<int, string, ApplicationServer> res = Server.DebugMain (new [] { "--applications", "/:.", "--port", "9000", "--nonstop" });
+#if TEST
+			
+			// CompatTuple<int, string, ApplicationServer> 
+			var res = Server.DebugMain (new [] { "--applications", "/:.", "--port", "9000", "--nonstop" });
 			server = res.Item3;
 			return res.Item1;
+#else	
+			return -1;
+#endif			
 		}
 	}
 }

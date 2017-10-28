@@ -96,7 +96,6 @@ esac
 
 AM_CONDITIONAL(UNITTESTS, test x${UNIT_TESTS} = xyes)
 AM_CONDITIONAL(PLATFORM_WIN32, test x$platform_win32 = xyes)
-AM_CONDITIONAL(NET_2_0, test ! x$DMCS = xno)
 AM_CONDITIONAL(NET_4_0, test ! x$DMCS = xno)
 AM_CONDITIONAL(XSP_ONLY, test x$platform_win32 = xyes)
 
@@ -134,11 +133,9 @@ AC_CONFIG_FILES([Makefile
 	lib/Makefile
 	shim/Makefile
 	src/Makefile
-	src/Mono.WebServer.Apache/Makefile
 	src/Mono.WebServer.FastCgi/Makefile
 	src/Mono.WebServer.XSP/Makefile
 	src/Mono.WebServer/Makefile
-	src/Mono.WebServer.Fpm/Makefile
 	test/1.1/Makefile
 	test/1.1/asp.net/Makefile
 	test/1.1/authtest/Makefile
@@ -170,9 +167,7 @@ AC_CONFIG_FILES([Makefile
 	man/mono-asp-apps.1
 	src/Mono.WebServer/AssemblyInfo2.cs
 	src/Mono.WebServer/AssemblyInfo4.cs
-	src/Mono.WebServer.Apache/AssemblyInfo.cs
 	src/Mono.WebServer.FastCgi/AssemblyInfo.cs
-	src/Mono.WebServer.Fpm/AssemblyInfo.cs
 	src/Mono.WebServer.XSP/AssemblyInfo.cs
 	src/Mono.WebServer.XSP/xsp.pc
 	src/Mono.WebServer.XSP/xsp-2.pc

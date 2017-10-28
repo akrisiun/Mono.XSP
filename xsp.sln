@@ -59,6 +59,5 @@ Global
 		SolutionGuid = {580EB140-2162-4031-9532-EC971E020FBF}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = src\Mono.WebServer.Fpm\Mono.WebServer.Fpm.csproj
 	EndGlobalSection
 EndGlobal
