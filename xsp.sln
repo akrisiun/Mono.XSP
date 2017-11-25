@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.WebServer.Test", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.WebServer.XSP", "src\Mono.WebServer.XSP\Mono.WebServer.XSP.csproj", "{0EACA9B4-922A-45AA-A59B-EEBAC752E9E0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSP", "src\Mono.WebServer.XSP\XSP.csproj", "{564FE347-84AD-4F2A-B5F0-49E9143174E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,14 @@ Global
 		{0EACA9B4-922A-45AA-A59B-EEBAC752E9E0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0EACA9B4-922A-45AA-A59B-EEBAC752E9E0}.Release-3.5|Any CPU.ActiveCfg = Release|Any CPU
 		{0EACA9B4-922A-45AA-A59B-EEBAC752E9E0}.Release-3.5|Any CPU.Build.0 = Release|Any CPU
+		{564FE347-84AD-4F2A-B5F0-49E9143174E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{564FE347-84AD-4F2A-B5F0-49E9143174E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{564FE347-84AD-4F2A-B5F0-49E9143174E8}.Debug-3.5|Any CPU.ActiveCfg = Debug|Any CPU
+		{564FE347-84AD-4F2A-B5F0-49E9143174E8}.Debug-3.5|Any CPU.Build.0 = Debug|Any CPU
+		{564FE347-84AD-4F2A-B5F0-49E9143174E8}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{564FE347-84AD-4F2A-B5F0-49E9143174E8}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{564FE347-84AD-4F2A-B5F0-49E9143174E8}.Release-3.5|Any CPU.ActiveCfg = Debug|Any CPU
+		{564FE347-84AD-4F2A-B5F0-49E9143174E8}.Release-3.5|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

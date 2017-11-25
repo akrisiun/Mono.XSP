@@ -1,16 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" 
-         xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0EACA9B4-922A-45AA-A59B-EEBAC752E9E0}</ProjectGuid>
+    <ProjectGuid>{564FE347-84AD-4F2A-B5F0-49E9143174E8}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Mono.WebServer.XSP</RootNamespace>
     <AssemblyName>XSP</AssemblyName>
-
     <TargetFrameworkVersion Condition="'$(OS)' == 'Windows_NT'">v4.6</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(OS)' != 'Windows_NT'">v4.6</TargetFrameworkVersion>
     <!-- <SignAssembly>true</SignAssembly>
@@ -29,17 +27,16 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-   
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Web" />
     <Reference Include="System.Configuration" />
-    <Reference Include="Mono.Security"  Condition="'$(OS)' != 'Windows_NT'" />
+    <Reference Include="Mono.Security" Condition="'$(OS)' != 'Windows_NT'" />
     <Reference Include="Mono.Posix" Condition="'$(OS)' != 'Windows_NT'" />
     <Reference Include="Mono.Posix" Condition="'$(OS)' == 'Windows_NT'">
       <HintPath>..\..\lib\Mono.Posix.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Security"  Condition="'$(OS)' == 'Windows_NT'">
+    <Reference Include="Mono.Security" Condition="'$(OS)' == 'Windows_NT'">
       <HintPath>..\..\lib\Mono.Security.dll</HintPath>
     </Reference>
   </ItemGroup>
@@ -57,14 +54,14 @@
     <Compile Include="CompatTuple.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mono.WebServer\Mono.WebServer.csproj">
-      <Project>{5339C36C-A524-44CE-93BD-59A79F57B346}</Project>
-      <Name>Mono.WebServer</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mono.WebServer\Mono.WebServer.csproj">
+      <Project>{5339c36c-a524-44ce-93bd-59a79f57b346}</Project>
+      <Name>Mono.WebServer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

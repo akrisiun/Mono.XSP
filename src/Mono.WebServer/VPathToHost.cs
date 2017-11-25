@@ -35,111 +35,120 @@ using System.Diagnostics;
 
 namespace Mono.WebServer
 {
-	public class VPathToHost
-	{
-		public readonly string vhost;
-		public readonly int vport;
-		public readonly string vpath;
-		public string realPath;
-		public readonly bool haveWildcard;
-		public IApplicationHost AppHost;
-		public IRequestBroker RequestBroker;
+    public class VPathToHost
+    {
+        public readonly string vhost;
+        public readonly int vport;
+        public readonly string vpath;
+        public string realPath;
+        public readonly bool haveWildcard;
+        public IApplicationHost AppHost;
+        public IRequestBroker RequestBroker;
 
-		public VPathToHost (string vhost, int vport, string vpath, string realPath)
-		{
-			this.vhost = (vhost != null) ? vhost.ToLower (CultureInfo.InvariantCulture) : null;
-			this.vport = vport;
-			this.vpath = vpath;
-			if (String.IsNullOrEmpty (vpath) || vpath [0] != '/')
-				throw new ArgumentException ("Virtual path must begin with '/': " + vpath,
-							     "vpath");
+        public VPathToHost(string vhost, int vport, string vpath, string realPath)
+        {
+            this.vhost = (vhost != null) ? vhost.ToLower(CultureInfo.InvariantCulture) : null;
+            this.vport = vport;
+            this.vpath = vpath;
+            if (String.IsNullOrEmpty(vpath) || vpath[0] != '/')
+                throw new ArgumentException("Virtual path must begin with '/': " + vpath,
+                                 "vpath");
 
-			this.realPath = realPath;
-			AppHost = null;
-			if (vhost != null && this.vhost.Length != 0 && this.vhost [0] == '*') {
-				haveWildcard = true;
-				if (this.vhost.Length > 2 && this.vhost [1] == '.')
-					this.vhost = this.vhost.Substring (2);
-			}
-		}
+            this.realPath = realPath;
+            AppHost = null;
+            if (vhost != null && this.vhost.Length != 0 && this.vhost[0] == '*')
+            {
+                haveWildcard = true;
+                if (this.vhost.Length > 2 && this.vhost[1] == '.')
+                    this.vhost = this.vhost.Substring(2);
+            }
+        }
 
-		public bool TryClearHost (IApplicationHost host)
-		{
-			if (AppHost == host) {
-				AppHost = null;
-				return true;
-			}
+        public bool TryClearHost(IApplicationHost host)
+        {
+            if (AppHost == host)
+            {
+                AppHost = null;
+                return true;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		public void UnloadHost ()
-		{
-			if (AppHost != null)
-				AppHost.Unload ();
+        public void UnloadHost()
+        {
+            if (AppHost != null)
+                AppHost.Unload();
 
-			AppHost = null;
-		}
+            AppHost = null;
+        }
 
-		public bool Redirect (string path, out string redirect)
-		{
-			redirect = null;
-			if (path.Length == vpath.Length - 1) {
-				redirect = vpath;
-				return true;
-			}
+        public bool Redirect(string path, out string redirect)
+        {
+            redirect = null;
+            if (path.Length == vpath.Length - 1)
+            {
+                redirect = vpath;
+                return true;
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		public bool Match (string vhost, int vport, string vpath)
-		{
-			if (vport != -1 && this.vport != -1 && vport != this.vport)
-				return false;
+        public bool Match(string vhost, int vport, string vpath)
+        {
+            if (vport != -1 && this.vport != -1 && vport != this.vport)
+                return false;
 
-			if (vpath == null)
-				return false;
+            if (vpath == null)
+                return false;
 
-			if (vhost != null && this.vhost != null && this.vhost != "*") {
-				int length = this.vhost.Length;
-				string lwrvhost = vhost.ToLower (CultureInfo.InvariantCulture);
-				if (haveWildcard) {
-					if (length > vhost.Length)
-						return false;
+            if (vhost != null && this.vhost != null && this.vhost != "*")
+            {
+                int length = this.vhost.Length;
+                string lwrvhost = vhost.ToLower(CultureInfo.InvariantCulture);
+                if (haveWildcard)
+                {
+                    if (length > vhost.Length)
+                        return false;
 
-					if (length == vhost.Length && this.vhost != lwrvhost)
-						return false;
+                    if (length == vhost.Length && this.vhost != lwrvhost)
+                        return false;
 
-					if (vhost [vhost.Length - length - 1] != '.')
-						return false;
+                    if (vhost[vhost.Length - length - 1] != '.')
+                        return false;
 
-					if (!lwrvhost.EndsWith (this.vhost))
-						return false;
+                    if (!lwrvhost.EndsWith(this.vhost))
+                        return false;
 
-				} else if (this.vhost != lwrvhost) {
-					return false;
-				}
-			}
+                }
+                else if (this.vhost != lwrvhost)
+                {
+                    return false;
+                }
+            }
 
-			int local = vpath.Length;
-			int vlength = this.vpath.Length;
-			if (vlength > local) {
-				// Check for /xxx requests to be redirected to /xxx/
-				if (this.vpath [vlength - 1] != '/')
-					return false;
+            int local = vpath.Length;
+            int vlength = this.vpath.Length;
+            if (vlength > local)
+            {
+                // Check for /xxx requests to be redirected to /xxx/
+                if (this.vpath[vlength - 1] != '/')
+                    return false;
 
-				return (vlength - 1 == local && this.vpath.Substring (0, vlength - 1) == vpath);
-			}
+                return (vlength - 1 == local && this.vpath.Substring(0, vlength - 1) == vpath);
+            }
 
-			return (vpath.StartsWith (this.vpath));
-		}
+            return (vpath.StartsWith(this.vpath));
+        }
 
-		public void CreateHost (ApplicationServer server, WebSource webSource)
-		{
-			string v = vpath;
-			if (v != "/" && v.EndsWith ("/")) {
-				v = v.Substring (0, v.Length - 1);
-			}
+        public void CreateHost(ApplicationServer server, WebSource webSource)
+        {
+            string v = vpath;
+            if (v != "/" && v.EndsWith("/"))
+            {
+                v = v.Substring(0, v.Length - 1);
+            }
 
             var domain = AppDomain.CurrentDomain;
             var debugDomain = domain.GetData("DebugDomain") as DebugDomain;
@@ -155,7 +164,8 @@ namespace Mono.WebServer
                     Mono.Web.Hosting.
                     ApplicationHost.CreateApplicationHost(hostType, v, realPath) as IApplicationHost;
                 AppHost.Server = server;
-            } catch (Exception err) { error = err.InnerException ?? err; }
+            }
+            catch (Exception err) { error = err.InnerException ?? err; }
 
             if (AppHost == null && error != null)
             {
@@ -167,13 +177,14 @@ namespace Mono.WebServer
                 throw error;
             }
 
-            if (!server.SingleApplication) {
-				// Link the host in the application domain with a request broker in the main domain
-				RequestBroker = webSource.CreateRequestBroker ();
-				AppHost.RequestBroker = RequestBroker;
-			}
-		}
-	}
+            if (!server.SingleApplication)
+            {
+                // Link the host in the application domain with a request broker in the main domain
+                RequestBroker = webSource.CreateRequestBroker();
+                AppHost.RequestBroker = RequestBroker;
+            }
+        }
+    }
 }
 
 namespace Mono.Web.Hosting
@@ -409,12 +420,13 @@ namespace Mono.Web.Hosting
             var domain = AppDomain.CurrentDomain;
             bool isDebug = Debugger.IsAttached;
             _AppDomain appdomain = DebugDomain.CreateDomain(domain_id, evidence, setup);
-                                // string domain_id, object evidence, object setup);
+            // string domain_id, object evidence, object setup);
             if (isDebug)
             {
                 domain.SetData("DebugDomain", appdomain);
             }
-            else {
+            else
+            {
                 appdomain = AppDomain.CreateDomain(domain_id, evidence, setup);
                 domain.SetData("DebugDomain", appdomain);
             }
@@ -438,11 +450,12 @@ namespace Mono.Web.Hosting
             try
             {
                 appdomain.DoCallBack(SetHostingEnvironment);
-            } catch (Exception err) { appdomain.SetData("load.Error", err); }
+            }
+            catch (Exception err) { appdomain.SetData("load.Error", err); }
 
             if ((appdomain as AppDomain) != null)
                 return (appdomain as AppDomain).CreateInstanceAndUnwrap(hostType.Module.Assembly.FullName, hostType.FullName);
-            
+
             return // (appdomain as DebugDomain)
                 AppDomain.CurrentDomain
                 .CreateInstanceAndUnwrap(hostType.Module.Assembly.FullName, hostType.FullName);
@@ -483,50 +496,52 @@ namespace System
     using System.Runtime.CompilerServices;
     using System.Reflection.Emit;
 
-    internal struct AppDomainHandle {
+    internal struct AppDomainHandle
+    {
         private IntPtr m_appDomainHandle;
-        internal AppDomainHandle(IntPtr domainHandle) {
+        internal AppDomainHandle(IntPtr domainHandle)
+        {
             m_appDomainHandle = domainHandle;
         }
     }
 
     public class _Activator : MarshalByRefObject // , IActivator
     {
-            /* [System.Runtime.InteropServices.ComVisible(true)]
-            public IConstructionReturnMessage Activate(IConstructionCallMessage msg)
-            {
-                return RemotingServices.DoCrossContextActivation(msg);
-            } */
- 
-            [MethodImplAttribute(MethodImplOptions.NoInlining)] // Methods containing StackCrawlMark local var has to be marked non-inlineable
-            public void LoadAssembly(AssemblyName an)
-            {
-                /* StackCrawlMark stackMark = StackCrawlMark.LookForMyCaller;
-                Assembly a = Assembly.InternalLoad(an, false, null, ref stackMark);
-                if (a == null)
-                    throw new RemotingException(
-                        String.Format( "Remoting_AssemblyLoadFailed",
-                            an));     
-                            */                           
-            }
+        /* [System.Runtime.InteropServices.ComVisible(true)]
+        public IConstructionReturnMessage Activate(IConstructionCallMessage msg)
+        {
+            return RemotingServices.DoCrossContextActivation(msg);
+        } */
+
+        [MethodImplAttribute(MethodImplOptions.NoInlining)] // Methods containing StackCrawlMark local var has to be marked non-inlineable
+        public void LoadAssembly(AssemblyName an)
+        {
+            /* StackCrawlMark stackMark = StackCrawlMark.LookForMyCaller;
+            Assembly a = Assembly.InternalLoad(an, false, null, ref stackMark);
+            if (a == null)
+                throw new RemotingException(
+                    String.Format( "Remoting_AssemblyLoadFailed",
+                        an));     
+                        */
         }
+    }
 
     public class DebugDomain : MarshalByRefObject, _AppDomain
     {
         public _AppDomain wrap;
-        public string ID {get; set;}
-        public object Evidence {get; set;}
-        public object Setup {get; set;}
+        public string ID { get; set; }
+        public object Setup { get; set; }
         public Assembly[] AsmList;
+        public Evidence Evidence { get; protected set; }
 
-        public DebugDomain() 
+        public DebugDomain()
         {
             Data = new Dictionary<string, object>();
-            AsmList = new Assembly[] {};
+            AsmList = new Assembly[] { };
         }
 
         // .CreateDomain _AppDomain
-        public static DebugDomain CreateDomain(string domain_id, object evidence, object setup)
+        public static DebugDomain CreateDomain(string domain_id, Evidence evidence, object setup)
         {
             var d = new DebugDomain() { ID = domain_id, Evidence = evidence, Setup = setup };
             return d;
@@ -540,7 +555,9 @@ namespace System
         }
 
 
-        private IntPtr           _pDomain = IntPtr.Zero;   
+        #region Get type
+
+        private IntPtr _pDomain = IntPtr.Zero;
         internal AppDomainHandle GetNativeHandle()
         {
             // This should never happen under normal circumstances. However, there ar ways to create an
@@ -570,68 +587,69 @@ namespace System
             assembly = null; type = null;
         }
 
-        public void GetTypeInfoCount(out uint pcTInfo) 
+        public void GetTypeInfoCount(out uint pcTInfo)
             => (AppDomain.CurrentDomain as _AppDomain).GetTypeInfoCount(out pcTInfo);
         // { pcTInfo = 0; }
- 
+
         public void GetTypeInfo(uint iTInfo, uint lcid, IntPtr ppTInfo)
         {
             (AppDomain.CurrentDomain as _AppDomain).GetTypeInfo(iTInfo, lcid, ppTInfo);
-        } 
- 
+        }
+
         // [In] 
         public void GetIDsOfNames(ref Guid riid, IntPtr rgszNames, uint cNames, uint lcid, IntPtr rgDispId)
         {
             (AppDomain.CurrentDomain as _AppDomain).GetIDsOfNames(ref riid, rgszNames, cNames, lcid, rgDispId);
         }
- 
-        public void Invoke(uint dispIdMember, [In] ref Guid riid, uint lcid, short wFlags, 
+
+        public void Invoke(uint dispIdMember, [In] ref Guid riid, uint lcid, short wFlags,
             IntPtr pDispParams, IntPtr pVarResult, IntPtr pExcepInfo, IntPtr puArgErr)
         {
             (AppDomain.CurrentDomain as _AppDomain).Invoke(dispIdMember, ref riid, lcid, wFlags, pDispParams,
                  pVarResult, pExcepInfo, puArgErr);
         }
- 
+
+        #endregion
+
         public override string ToString() => ID;
-        public override bool Equals (Object other) => ID.Equals((other as DebugDomain)?.ID ?? "-");
-        public override int GetHashCode () => ID.GetHashCode();
-        //  public override Type GetType () => typeof(Domain);
- 
+        public override bool Equals(Object other) => ID.Equals((other as DebugDomain)?.ID ?? "-");
+        public override int GetHashCode() => ID.GetHashCode();
+
+        public static Context DefaultContext {
+            [System.Security.SecurityCritical]  // auto-generated_required
+            get {
+                return null; // Thread.GetDomain().GetDefaultContext();
+            }
+        }
+
+        #region Object, Lifetime
+
         [System.Security.SecurityCritical]  // auto-generated_required
         public new virtual object GetLifetimeService()
         {
             return null; // LifetimeServices.GetLease(this); 
         }
- 
-       // This method is used return lifetime service object. This method
-       // can be overridden to return a LifetimeService object with properties unique to
-       // this object.
-       // For the default Lifetime service this will be an object of type ILease.
-       // 
+
+        // This method is used return lifetime service object. This method
+        // can be overridden to return a LifetimeService object with properties unique to
+        // this object.
+        // For the default Lifetime service this will be an object of type ILease.
+        // 
         [System.Security.SecurityCritical]  // auto-generated_required
         public override object InitializeLifetimeService()
         {
             Debugger.Break();
             return null; // LifetimeServices.GetLeaseInitial(this);
         }
- 
+
         [System.Security.SecurityCritical]  // auto-generated_required
         public new virtual ObjRef CreateObjRef(Type requestedType)
         {
             // if(__identity == null)
             //     throw new RemotingException(("Remoting_NoIdentityEntry"));
             Debugger.Break();
-            
-            return new ObjRef(this, requestedType);
-        }
 
-        public static Context DefaultContext 
-        {
-            [System.Security.SecurityCritical]  // auto-generated_required
-            get 
-            {
-                return null; // Thread.GetDomain().GetDefaultContext();
-            }
+            return new ObjRef(this, requestedType);
         }
 
         public Object CreateInstanceAndUnwrap(String assemblyName,
@@ -640,38 +658,41 @@ namespace System
             ObjectHandle oh = CreateInstance(assemblyName, typeName);
             if (oh == null)
                 return null;
-             return oh.Unwrap();
+            return oh.Unwrap();
         } // CreateInstanceAndUnwrap
-  
-        public Object CreateInstanceAndUnwrap(String assemblyName, 
+
+        public Object CreateInstanceAndUnwrap(String assemblyName,
                                               String typeName,
                                               Object[] activationAttributes)
         {
             ObjectHandle oh = CreateInstance(assemblyName, typeName, activationAttributes);
             if (oh == null)
-                return null; 
- 
+                return null;
+
             return oh.Unwrap();
         } // CreateInstanceAndUnwrap
 
-        public ObjectHandle CreateInstance(String assemblyName, String typeName) {
+        public ObjectHandle CreateInstance(String assemblyName, String typeName)
+        {
             Debugger.Break();
             return AppDomain.CurrentDomain.CreateInstance(assemblyName, typeName);
         }
-                                          
-        public ObjectHandle CreateInstanceFrom(String assemblyFile, String typeName) {
+
+        public ObjectHandle CreateInstanceFrom(String assemblyFile, String typeName)
+        {
             Debugger.Break();
             return AppDomain.CurrentDomain.CreateInstanceFrom(assemblyFile, typeName, null);
         }
-                                          
+
         public ObjectHandle CreateInstance(String assemblyName,
                                     String typeName,
-                                    Object[] activationAttributes) {
+                                    Object[] activationAttributes)
+        {
             Debugger.Break();
             return AppDomain.CurrentDomain.CreateInstanceFrom(assemblyName, typeName, activationAttributes);
         }
 
- 
+
         public ObjectHandle CreateInstanceFrom(String assemblyFile,
                                         String typeName,
                                         Object[] activationAttributes)
@@ -679,53 +700,50 @@ namespace System
             Debugger.Break();
             return AppDomain.CurrentDomain.CreateInstanceFrom(assemblyFile, typeName, activationAttributes);
         }
- 
-       [Obsolete("no Evidence use")]
-       public ObjectHandle CreateInstance(String assemblyName, 
-                                   String typeName, 
-                                   bool ignoreCase,
-                                   BindingFlags bindingAttr, 
-                                   Binder binder,
-                                   Object[] args,
-                                    CultureInfo culture,
-                                   Object[] activationAttributes,
-                                   Evidence securityAttributes) 
-                                   
+
+        #endregion
+
+        [Obsolete("no Evidence use")]
+        public ObjectHandle CreateInstance(String assemblyName,
+                                    String typeName,
+                                    bool ignoreCase,
+                                    BindingFlags bindingAttr,
+                                    Binder binder,
+                                    Object[] args,
+                                     CultureInfo culture,
+                                    Object[] activationAttributes,
+                                    Evidence securityAttributes)
+
         {
             Debugger.Break();
             return AppDomain.CurrentDomain.CreateInstance(assemblyName, typeName, ignoreCase, bindingAttr,
                    binder, args, culture, activationAttributes, securityAttributes);
         }
- 
- 
-        /*
-        [System.Security.SecurityCritical]  // auto-generated_required
-        public Object InitializeLifetimeService ()         {return null; }
-        [System.Security.SecurityCritical]  // auto-generated_required
-        public Object GetLifetimeService ()         {return null; }
-        */
 
-#pragma warning disable 67
+        #pragma warning disable 67
 
-        // Evidence Evidence { get; }
+        #region Events
+
         public event EventHandler DomainUnload;
- 
-        [method:System.Security.SecurityCritical]
+
+        [method: System.Security.SecurityCritical]
         public event AssemblyLoadEventHandler AssemblyLoad;
- 
+
         public event EventHandler ProcessExit;
- 
-        [method:System.Security.SecurityCritical]
+
+        [method: System.Security.SecurityCritical]
         public event ResolveEventHandler TypeResolve;
- 
-        [method:System.Security.SecurityCritical]
+
+        [method: System.Security.SecurityCritical]
         public event ResolveEventHandler ResourceResolve;
- 
-        [method:System.Security.SecurityCritical]
+
+        [method: System.Security.SecurityCritical]
         public event ResolveEventHandler AssemblyResolve;
- 
-        [method:System.Security.SecurityCritical]
+
+        [method: System.Security.SecurityCritical]
         public event UnhandledExceptionEventHandler UnhandledException;
+
+        #endregion
 
         #region Assembly loader 
 
@@ -746,11 +764,11 @@ namespace System
         {
             // if (evidence != null && !AppDomain.CurrentDomain.IsLegacyCasPolicyEnabled)
             //    throw new NotSupportedException(("NotSupported_RequiresCasPolicyExplicit"));
- 
+
             lock (typeof(AssemblyBuilderLock))
             {
                 // we can only create dynamic assemblies in the current domain
-                return default(AssemblyBuilder); 
+                return default(AssemblyBuilder);
                 /* 
                 return new AssemblyBuilder(AppDomain.CurrentDomain,
                                            name,
@@ -766,91 +784,91 @@ namespace System
             } //lock(typeof(AssemblyBuilderLock))
         }
         private class AssemblyBuilderLock { }
- 
-        public AssemblyBuilder DefineDynamicAssembly(AssemblyName            name,
-                                              AssemblyBuilderAccess   access) 
-                                              {return null; }
- 
-        public AssemblyBuilder DefineDynamicAssembly(AssemblyName            name,
-                                              AssemblyBuilderAccess   access,
-                                              String                  dir) 
-                                              {return null; }
- 
-        public AssemblyBuilder DefineDynamicAssembly(AssemblyName            name,
-                                              AssemblyBuilderAccess   access,
-                                              Evidence                evidence) 
-                                              {return null; }
- 
-        public AssemblyBuilder DefineDynamicAssembly(AssemblyName            name,
-                                              AssemblyBuilderAccess   access,
-                                              PermissionSet           requiredPermissions,
-                                              PermissionSet           optionalPermissions,
-                                              PermissionSet           refusedPermissions) 
-                                              {return null; }
- 
-        public AssemblyBuilder DefineDynamicAssembly(AssemblyName            name,
-                                              AssemblyBuilderAccess   access,
-                                              String                  dir,
-                                              Evidence                evidence) 
-                                              {return null; }
- 
-        public AssemblyBuilder DefineDynamicAssembly(AssemblyName            name,
-                                              AssemblyBuilderAccess   access,
-                                              String                  dir,
-                                              PermissionSet           requiredPermissions,
-                                              PermissionSet           optionalPermissions,
-                                              PermissionSet           refusedPermissions) 
-                                              {return null; }
- 
-        public AssemblyBuilder DefineDynamicAssembly(AssemblyName            name,
-                                              AssemblyBuilderAccess   access,
-                                              Evidence                evidence,
-                                              PermissionSet           requiredPermissions,
-                                              PermissionSet           optionalPermissions,
-                                              PermissionSet           refusedPermissions) 
-                                              { return null; }
- 
-        public AssemblyBuilder DefineDynamicAssembly(AssemblyName            name,
-                                              AssemblyBuilderAccess   access,
-                                              String                  dir,
-                                              Evidence                evidence,
-                                              PermissionSet           requiredPermissions,
-                                              PermissionSet           optionalPermissions,
-                                              PermissionSet           refusedPermissions) 
-                                              { return null; }
- 
-        public AssemblyBuilder DefineDynamicAssembly(AssemblyName     name,
-                                              AssemblyBuilderAccess   access,
-                                              String                  dir,
-                                              Evidence                evidence,
-                                              PermissionSet           requiredPermissions,
-                                              PermissionSet           optionalPermissions,
-                                              PermissionSet           refusedPermissions,
-                                              bool                    isSynchronized)
-                                              { return null; }
-       
-        
+
+        public AssemblyBuilder DefineDynamicAssembly(AssemblyName name,
+                                              AssemblyBuilderAccess access)
+        { return null; }
+
+        public AssemblyBuilder DefineDynamicAssembly(AssemblyName name,
+                                              AssemblyBuilderAccess access,
+                                              String dir)
+        { return null; }
+
+        public AssemblyBuilder DefineDynamicAssembly(AssemblyName name,
+                                              AssemblyBuilderAccess access,
+                                              Evidence evidence)
+        { return null; }
+
+        public AssemblyBuilder DefineDynamicAssembly(AssemblyName name,
+                                              AssemblyBuilderAccess access,
+                                              PermissionSet requiredPermissions,
+                                              PermissionSet optionalPermissions,
+                                              PermissionSet refusedPermissions)
+        { return null; }
+
+        public AssemblyBuilder DefineDynamicAssembly(AssemblyName name,
+                                              AssemblyBuilderAccess access,
+                                              String dir,
+                                              Evidence evidence)
+        { return null; }
+
+        public AssemblyBuilder DefineDynamicAssembly(AssemblyName name,
+                                              AssemblyBuilderAccess access,
+                                              String dir,
+                                              PermissionSet requiredPermissions,
+                                              PermissionSet optionalPermissions,
+                                              PermissionSet refusedPermissions)
+        { return null; }
+
+        public AssemblyBuilder DefineDynamicAssembly(AssemblyName name,
+                                              AssemblyBuilderAccess access,
+                                              Evidence evidence,
+                                              PermissionSet requiredPermissions,
+                                              PermissionSet optionalPermissions,
+                                              PermissionSet refusedPermissions)
+        { return null; }
+
+        public AssemblyBuilder DefineDynamicAssembly(AssemblyName name,
+                                              AssemblyBuilderAccess access,
+                                              String dir,
+                                              Evidence evidence,
+                                              PermissionSet requiredPermissions,
+                                              PermissionSet optionalPermissions,
+                                              PermissionSet refusedPermissions)
+        { return null; }
+
+        public AssemblyBuilder DefineDynamicAssembly(AssemblyName name,
+                                              AssemblyBuilderAccess access,
+                                              String dir,
+                                              Evidence evidence,
+                                              PermissionSet requiredPermissions,
+                                              PermissionSet optionalPermissions,
+                                              PermissionSet refusedPermissions,
+                                              bool isSynchronized)
+        { return null; }
+
+
         [System.Security.SecuritySafeCritical]  // auto-generated
         [MethodImplAttribute(MethodImplOptions.NoInlining)] // Methods containing StackCrawlMark local var has to be marked non-inlineable
         public Assembly Load(AssemblyName assemblyRef)
         {
             //StackCrawlMark stackMark = StackCrawlMark.LookForMyCaller;
-            return null; 
+            return null;
             // RuntimeAssembly.InternalLoadAssemblyName(assemblyRef, null, null, ref stackMark, true /*thrownOnFileNotFound*/, false, false);
         }
-        
+
         [System.Security.SecuritySafeCritical]  // auto-generated
         [MethodImplAttribute(MethodImplOptions.NoInlining)] // Methods containing StackCrawlMark local var has to be marked non-inlineable
         public Assembly Load(string assemblyString)
         {
             //StackCrawlMark stackMark = StackCrawlMark.LookForMyCaller;
-            return null; 
+            return null;
             // return RuntimeAssembly.InternalLoad(assemblyString, null, ref stackMark, false);
         }
 
         public class RuntimeAssembly
         {
-            internal static Assembly InternalLoad(string assemblyString, object a, ref StackCrawlMark stackMark, 
+            internal static Assembly InternalLoad(string assemblyString, object a, ref StackCrawlMark stackMark,
                      bool fIntrospection)
             {
                 return nLoadFile(assemblyString, default(Evidence));
@@ -860,7 +878,7 @@ namespace System
             [ResourceExposure(ResourceScope.Machine)]
             [MethodImplAttribute(MethodImplOptions.InternalCall)]
             static internal extern Assembly nLoadFile(String path, Evidence evidence);
-    
+
             [System.Security.SecurityCritical]  // auto-generated
             [ResourceExposure(ResourceScope.None)]
             [MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -873,29 +891,29 @@ namespace System
 
         }
 
-         /*  CustomQueryInterface
-        static Guid IID_IManagedObject = new Guid("{C3FCC19E-A970-11D2-8B5A-00A0C9B7C9C4}");
- 
-        [System.Security.SecurityCritical]
-        CustomQueryInterfaceResult ICustomQueryInterface.GetInterface(ref Guid iid, out IntPtr ppv) {
-            ppv = IntPtr.Zero;
-            if (iid == this._iidSourceItf || iid == typeof(NativeMethods.IDispatch).GUID) {
-                ppv = Marshal.GetComInterfaceForObject(this, typeof(NativeMethods.IDispatch), CustomQueryInterfaceMode.Ignore);
-                return CustomQueryInterfaceResult.Handled;
-            }
-            else if (iid == IID_IManagedObject)
-            {
-                return CustomQueryInterfaceResult.Failed;
-            }
- 
-            return CustomQueryInterfaceResult.NotHandled;
-        } */
+        /*  CustomQueryInterface
+       static Guid IID_IManagedObject = new Guid("{C3FCC19E-A970-11D2-8B5A-00A0C9B7C9C4}");
+
+       [System.Security.SecurityCritical]
+       CustomQueryInterfaceResult ICustomQueryInterface.GetInterface(ref Guid iid, out IntPtr ppv) {
+           ppv = IntPtr.Zero;
+           if (iid == this._iidSourceItf || iid == typeof(NativeMethods.IDispatch).GUID) {
+               ppv = Marshal.GetComInterfaceForObject(this, typeof(NativeMethods.IDispatch), CustomQueryInterfaceMode.Ignore);
+               return CustomQueryInterfaceResult.Handled;
+           }
+           else if (iid == IID_IManagedObject)
+           {
+               return CustomQueryInterfaceResult.Failed;
+           }
+
+           return CustomQueryInterfaceResult.NotHandled;
+       } */
 
         [System.Security.SecuritySafeCritical]  // auto-generated
         [MethodImplAttribute(MethodImplOptions.NoInlining)] // Methods containing StackCrawlMark local var has to be marked non-inlineable
         public Assembly Load(byte[] rawAssembly)
         {
-//             StackCrawlMark stackMark = StackCrawlMark.LookForMyCaller;
+            //             StackCrawlMark stackMark = StackCrawlMark.LookForMyCaller;
             return null;
             /*
             return RuntimeAssembly.nLoadImage(rawAssembly,
@@ -916,45 +934,47 @@ namespace System
             LookForThread = 3
         }
 
-        public int ExecuteAssembly(string asm, Evidence e) {
+        public int ExecuteAssembly(string asm, Evidence e)
+        {
             return 0;
         }
-        public int ExecuteAssembly(string asm, Evidence e, string[] a) {
+        public int ExecuteAssembly(string asm, Evidence e, string[] a)
+        {
             return 0;
         }
 
-     
-       public ObjectHandle CreateInstanceFrom(String assemblyFile,
-                                       String typeName, 
-                                       bool ignoreCase,
-                                       BindingFlags bindingAttr, 
-                                       Binder binder,
-                                        Object[] args,
-                                       CultureInfo culture,
-                                       Object[] activationAttributes,
-                                       Evidence securityAttributes) 
-                                       {return null; }
- 
+
+        public ObjectHandle CreateInstanceFrom(String assemblyFile,
+                                        String typeName,
+                                        bool ignoreCase,
+                                        BindingFlags bindingAttr,
+                                        Binder binder,
+                                         Object[] args,
+                                        CultureInfo culture,
+                                        Object[] activationAttributes,
+                                        Evidence securityAttributes)
+        { return null; }
+
         /* 
         public Assembly Load(AssemblyName assemblyRef)           {return null; }
         public Assembly Load(String assemblyString)          {return null; }
         public Assembly Load(byte[] rawAssembly)          {return null; }
         */
 
-        public Assembly Load(byte[] rawAssembly, byte[] rawSymbolStore) 
+        public Assembly Load(byte[] rawAssembly, byte[] rawSymbolStore)
         { return null; }
- 
+
         public Assembly Load(byte[] rawAssembly, byte[] rawSymbolStore,
-                      Evidence securityEvidence) 
+                      Evidence securityEvidence)
         { return null; }
- 
-        public Assembly Load(AssemblyName assemblyRef, Evidence assemblySecurity) 
-                      { return null; }     
- 
-        public Assembly Load(String assemblyString, 
-                      Evidence assemblySecurity) 
-                      { return null; }
- 
+
+        public Assembly Load(AssemblyName assemblyRef, Evidence assemblySecurity)
+        { return null; }
+
+        public Assembly Load(String assemblyString,
+                      Evidence assemblySecurity)
+        { return null; }
+
         /* [ResourceExposure(ResourceScope.Machine)]
         public int ExecuteAssembly(String assemblyFile, 
                       Evidence assemblySecurity) => 0;
@@ -965,81 +985,78 @@ namespace System
                             String[] args) => 0; */
 
         [ResourceExposure(ResourceScope.Machine)]
-        public int ExecuteAssembly(String assemblyFile) 
-        { 
+        public int ExecuteAssembly(String assemblyFile)
+        {
             Debugger.Break();
             return 0;
         }
 
         #endregion
- 
-        public String FriendlyName
-        { get => ID; }
 
-        public String BaseDirectory
-        {
+        public String FriendlyName { get => ID; }
+
+        public String BaseDirectory {
             [ResourceExposure(ResourceScope.Machine)]
-            get; 
+            get;
             private set;
         }
- 
-        public String RelativeSearchPath
-        { 
-            get; 
-            private set; }
- 
-        public bool ShadowCopyFiles
-        { 
-            get; 
-            private set; 
+
+        public String RelativeSearchPath {
+            get;
+            private set;
         }
 
-        
+        public bool ShadowCopyFiles {
+            get;
+            private set;
+        }
+
+
         public Assembly[] GetAssemblies() => AsmList;
 
         [System.Security.SecurityCritical]  // auto-generated_required
-        public void AppendPrivatePath(String path) {}
- 
+        public void AppendPrivatePath(String path) { }
+
         [System.Security.SecurityCritical]  // auto-generated_required
-        public void ClearPrivatePath() {}
- 
+        public void ClearPrivatePath() { }
+
         [System.Security.SecurityCritical]  // auto-generated_required
-        public void SetShadowCopyPath (String s) { }
- 
+        public void SetShadowCopyPath(String s) { }
+
         [System.Security.SecurityCritical]  // auto-generated_required
-        public void ClearShadowCopyPath ( ) {}
- 
+        public void ClearShadowCopyPath() { }
+
         [System.Security.SecurityCritical]  // auto-generated_required
-        public void SetCachePath (String s) {}
+        public void SetCachePath(String s) { }
         //FEATURE_FUSION
 
         [System.Security.SecurityCritical]  // auto-generated_required
-        public  void SetData(String name, Object data) 
+        public void SetData(String name, Object data)
         {
             if (Data.ContainsKey(name))
-                 Data[name] = data;
+                Data[name] = data;
             else Data.Add(name, data);
 
             AppDomain.CurrentDomain.SetData(name, data);
         }
- 
+
         // #if FEATURE_CORECLR
         // [System.Security.SecurityCritical] // auto-generated
         // #endif
         public Object GetData(string name) => Data[name];
 
-        public IDictionary<string, object> Data { get; set;}
- 
-        [System.Security.SecurityCritical]  // auto-generated_required
-        public void SetAppDomainPolicy(PolicyLevel domainPolicy) {}
- 
-        public void SetThreadPrincipal(IPrincipal principal) {}
-        public void SetPrincipalPolicy(PrincipalPolicy policy) {}
+        public IDictionary<string, object> Data { get; set; }
 
-        internal const int CTX_FROZEN                = 0x00000002;
+        [System.Security.SecurityCritical]  // auto-generated_required
+        public void SetAppDomainPolicy(PolicyLevel domainPolicy) { }
+
+        public void SetThreadPrincipal(IPrincipal principal) { }
+        public void SetPrincipalPolicy(PrincipalPolicy policy) { }
+
+        internal const int CTX_FROZEN = 0x00000002;
 
         // /#mscorlib/system/runtime/remoting/context.cs,db99ae9744885227
-        public void DoCallBack(CrossAppDomainDelegate deleg) 
+        public void DoCallBack(CrossAppDomainDelegate deleg)
         {
             if (deleg == null)
                 throw new ArgumentNullException("deleg");
@@ -1047,10 +1064,10 @@ namespace System
             // if ((_ctxFlags & CTX_FROZEN) == 0)
             //  throw new RemotingException(   (    "Remoting_Contexts_ContextNotFrozenForCallBack"));
             /* Context currCtx = Thread.CurrentContext;
-            if (currCtx == this) */ 
-                // We are already in the target context, just execute deleg 
-            deleg(); 
-                                           
+            if (currCtx == this) */
+            // We are already in the target context, just execute deleg 
+            deleg();
+
             /* 
             else {
                 // We pass 0 for target domain ID for x-context case.
@@ -1062,7 +1079,7 @@ namespace System
         [System.Security.SecurityCritical]  // auto-generated
         internal void DoCallBackGeneric(Context currCtx,
             IntPtr targetCtxID, CrossContextDelegate deleg)
-        {               
+        {
             /* TransitionCall msgCall = new TransitionCall(targetCtxID, deleg);           
             Message.PropagateCallContextFromThreadToMessage(msgCall);
 
@@ -1075,8 +1092,8 @@ namespace System
                     throw msg.Exception; 
                     */
         }
-  
-        public String DynamicDirectory  { get; protected set; }
+
+        public String DynamicDirectory { get; protected set; }
     }
 
 }
