@@ -1,3 +1,5 @@
+#region MIT
+
 //
 // Mono.WebServer.MonoWorkerRequest
 //
@@ -33,6 +35,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+#endregion
+
 using System;
 using System.Collections.Specialized;
 using System.Configuration;
@@ -45,6 +49,10 @@ using System.Web.Hosting;
 using Mono.WebServer.Log;
 using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
+using System.Web.SessionState;
+using System.Globalization;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace Mono.WebServer
 {	
@@ -382,14 +390,65 @@ namespace Mono.WebServer
 			}
 		}
 
-		public void ProcessRequest ()
+		public void ProcessRequest (HttpWorkerRequest wr = null)
 		{
 			string error = null;
 			inUnhandledException = false;
 			
+			var ctx = HttpContext.Current?.Application;
+			HttpApplication app = null;
+			StateRuntime state = null;
+
+			string[] args = Environment.GetCommandLineArgs();
+			if (Debugger.IsAttached && args.Length >= 5)
+			{
+				PreApplicationStartMethodAttribute[] attributes = null;
+				string dll = null;
+				Assembly assembly = null;
+				try {
+					dll = args[4];
+					assembly = Assembly.LoadFrom(this.HostPath + "bin/" + dll);
+					attributes = (PreApplicationStartMethodAttribute[])assembly
+						.GetCustomAttributes(typeof(PreApplicationStartMethodAttribute), inherit: true);
+				} catch {}
+				PreApplicationStartMethodAttribute att = attributes.FirstOrDefault();
+				if (att != null)
+				{
+					var type = att.Type;
+					var m = att.MethodName;
+					var method = type.GetMethod(m, BindingFlags.Public | BindingFlags.Static | BindingFlags.IgnoreCase,
+									binder: null,
+									types: Type.EmptyTypes,
+									modifiers: null);
+					if (method != null)								
+						method.Invoke(null, BindingFlags.Static, null, null, CultureInfo.CurrentCulture);
+						// Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+				}
+			}
+			/*  if (ctx == null)
+			{
+			    state = new StateRuntime();
+				if (HttpContext.Current != null)
+					app = HttpContext.Current.ApplicationInstance as HttpApplication;
+					// HttpApplicationFactory.GetApplicationInstance(HttpContext.Current) 
+			}   */
+
+			HttpResponse response = null;
+     		var request = HttpContext.Current?.Request;
+
 			try {
-				AssertFileAccessible ();
+				AssertFileAccessible();
+
+				response = HttpContext.Current?.Response;
 				HttpRuntime.ProcessRequest (this);
+
+				IHttpHandler  hand = AppDomain.CurrentDomain.GetData("web:app") as IHttpHandler;
+				app = hand as HttpApplication;
+				/* if (hand != null) {
+					response = HttpContext.Current?.Response;
+					hand.ProcessRequest(new HttpContext(request, response));
+				}  */
+
 			} catch (HttpException ex) {
 				inUnhandledException = true;
 				error = ex.GetHtmlErrorMessage ();

@@ -106,7 +106,7 @@ namespace Mono.WebServer
 				return;
 			}
 
-			ProcessRequest (mwr);
+			ProcessRequest(mwr);
 		}
 
 		const string CONTENT301 = "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">\n" +

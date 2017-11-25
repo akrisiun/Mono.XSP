@@ -107,8 +107,8 @@ namespace Mono.WebServer.XSP
 			if (configurationManager.Help) {
 				configurationManager.PrintHelp ();
 #if DEBUG
-				Console.WriteLine ("Press any key...");
-				Console.ReadKey ();
+				// Console.WriteLine ("Press any key...");
+				// Console.ReadKey ();
 #endif
 				return success;
 			}
@@ -192,10 +192,13 @@ namespace Mono.WebServer.XSP
 						Console.WriteLine ("Hit Return to stop the server.");
 
 					while (true) {
-						bool doSleep;
+						bool doSleep = true;
 						try {
-							Console.ReadLine ();
-							break;
+							
+							// Console.ReadLine ();
+							Thread.Sleep (5000);
+							Console.Write(".");
+							// break;
 						} catch (IOException) {
 							// This might happen on appdomain unload
 							// until the previous threads are terminated.
@@ -206,6 +209,9 @@ namespace Mono.WebServer.XSP
 
 						if (doSleep)
 							Thread.Sleep (500);
+
+						if (AppDomain.CurrentDomain == null)
+							break;	  // todo: better exit condition (with sockets)
 					}
 					server.Stop ();
 				}

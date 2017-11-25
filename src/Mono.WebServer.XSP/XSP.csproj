@@ -9,13 +9,12 @@
     <ProjectGuid>{0EACA9B4-922A-45AA-A59B-EEBAC752E9E0}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Mono.WebServer.XSP</RootNamespace>
-    <AssemblyName>Mono.WebServer.XSP</AssemblyName>
+    <AssemblyName>XSP</AssemblyName>
 
     <TargetFrameworkVersion Condition="'$(OS)' == 'Windows_NT'">v4.6</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(OS)' != 'Windows_NT'">v4.6</TargetFrameworkVersion>
-
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
+    <!-- <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile> -->
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -28,31 +27,15 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <!--
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    -->
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+   
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Configuration">
-      <HintPath>..\lib\System.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
     <Reference Include="Mono.Security"  Condition="'$(OS)' != 'Windows_NT'" />
-    <Reference Include="Mono.Posix"     Condition="'$(OS)' != 'Windows_NT'" />
-
+    <Reference Include="Mono.Posix" Condition="'$(OS)' != 'Windows_NT'" />
     <Reference Include="Mono.Posix" Condition="'$(OS)' == 'Windows_NT'">
       <HintPath>..\..\lib\Mono.Posix.dll</HintPath>
     </Reference>
@@ -74,16 +57,10 @@
     <Compile Include="CompatTuple.cs" />
   </ItemGroup>
   <ItemGroup>
-    <!--
     <ProjectReference Include="..\Mono.WebServer\Mono.WebServer.csproj">
       <Project>{5339C36C-A524-44CE-93BD-59A79F57B346}</Project>
       <Name>Mono.WebServer</Name>
     </ProjectReference>
-    -->
-    <Reference Include="Microsoft.Owin.Security">
-      <HintPath>..\Mono.WebServer\bin\Mono.WebServer.dll</HintPath>
-    </Reference>
-
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

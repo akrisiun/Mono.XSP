@@ -32,6 +32,7 @@ using TP = Mono.Security.Protocol.Tls;
 using Mono.WebServer.Options;
 
 namespace Mono.WebServer.XSP {
+	
 	class ConfigurationManager : ServerConfigurationManager
 	{
 		#region Backing fields

@@ -63,6 +63,7 @@ namespace Mono.WebServer.FastCgi
 		static void Redirect (HttpWorkerRequest wr, string location)
 		{
 			string host = wr.GetKnownRequestHeader (HttpWorkerRequest.HeaderHost);
+			
 			wr.SendStatus (301, "Moved Permanently");
 			wr.SendUnknownResponseHeader ("Connection", "close");
 			wr.SendUnknownResponseHeader ("Date", DateTime.Now.ToUniversalTime ().ToString ("r"));
@@ -133,7 +134,10 @@ namespace Mono.WebServer.FastCgi
 		public bool VirtualFileExists (string virtualPath)
 		{
 			VirtualPathProvider vpp = HostingEnvironment.VirtualPathProvider;
-			// TODO: Remove the second condition of the "if" statement (it is only a workaround) involving DefaultVirtualPathProvider as soon as Mono's DefaultVirtualPathProvider.FileExists method works properly (i.e., the indirectly-called HostingEnvironment.MapPath method should not require an HttpContext.Current.Request object to do its work; also see the comment in the ApplicationHost.MapPath method above)
+			// TODO: Remove the second condition of the "if" statement (it is only a workaround) involving 
+			// DefaultVirtualPathProvider as soon as Mono's DefaultVirtualPathProvider.FileExists method works properly 
+			// (i.e., the indirectly-called HostingEnvironment.MapPath method should not require 
+			// an HttpContext.Current.Request object to do its work; also see the comment in the ApplicationHost.MapPath method above)
 			if (vpp != null && !vpp.GetType().FullName.Equals("System.Web.Hosting.DefaultVirtualPathProvider", StringComparison.Ordinal))
 				return vpp.FileExists (virtualPath);
 
@@ -143,7 +147,11 @@ namespace Mono.WebServer.FastCgi
 		bool VirtualDirectoryExists (string virtualPath, HttpWorkerRequest worker)
 		{
 			VirtualPathProvider vpp = HostingEnvironment.VirtualPathProvider;
-			// TODO: Remove the second condition of the "if" statement (it is only a workaround) involving DefaultVirtualPathProvider as soon as Mono's DefaultVirtualPathProvider.DirectoryExists method works properly (i.e., the indirectly-called HostingEnvironment.MapPath method should not require an HttpContext.Current.Request object to do its work; also see the comment in the ApplicationHost.MapPath method above)
+			// TODO: Remove the second condition of the "if" statement (it is only a workaround) involving
+			// DefaultVirtualPathProvider as soon 
+			// as Mono's DefaultVirtualPathProvider.DirectoryExists method works properly (i.e., the indirectly-called
+			//  HostingEnvironment.MapPath method should not require an 
+			//  HttpContext.Current.Request object to do its work; also see the comment in the ApplicationHost.MapPath method above)
 			if (vpp != null && !vpp.GetType().FullName.Equals("System.Web.Hosting.DefaultVirtualPathProvider", StringComparison.Ordinal))
 				return vpp.DirectoryExists (virtualPath);
 
