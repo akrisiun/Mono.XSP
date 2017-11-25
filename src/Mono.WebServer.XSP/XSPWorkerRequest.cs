@@ -134,7 +134,23 @@ namespace Mono.WebServer
 			indexFiles = SplitAndTrim (list);
 		}
 
-		public XSPWorkerRequest (int requestId,
+        public static XSPWorkerRequest Create(int requestId,
+                                 XSPRequestBroker requestBroker,
+                                 IApplicationHost appHost,
+                                 EndPoint localEP, EndPoint remoteEP,
+                                 string verb, string path,
+                                 string queryString, string protocol,
+                                 byte[] inputBuffer, IntPtr socket,
+                                 bool secure = false)
+        {
+            var vPath = AppDomain.CurrentDomain.GetData(".appVPath") as string;
+            var mwr = new XSPWorkerRequest(requestId, requestBroker, appHost, localEP, remoteEP,
+                          verb, path, queryString, protocol, inputBuffer,
+                          socket: socket, secure: secure);
+            return mwr;
+        }
+
+        public XSPWorkerRequest(int requestId,
 		                         XSPRequestBroker requestBroker,
 		                         IApplicationHost appHost,
 		                         EndPoint localEP, EndPoint remoteEP,
