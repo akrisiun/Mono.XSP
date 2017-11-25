@@ -26,7 +26,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using Mono.WebServer.FastCgi.Compatibility;
+//using Mono.WebServer.FastCgi.Compatibility;
 using NUnit.Framework;
 using System;
 
@@ -38,7 +38,8 @@ namespace Mono.WebServer.Test {
 		[Test]
 		public void TestCase ()
 		{
-			var test = new CompatArraySegment<int> (new int[1]);
+#if UNIX
+            var test = new CompatArraySegment<int> (new int[1]);
 
 			test [0] = -3;
 			Assert.AreEqual (-3, test [0]);
@@ -49,7 +50,10 @@ namespace Mono.WebServer.Test {
 				Assert.Fail ("Out of range access");
 			} catch (ArgumentOutOfRangeException) {
 			}
-		}
-	}
+#else
+            throw new NotImplementedException("no Unix");
+#endif
+        }
+    }
 }
 

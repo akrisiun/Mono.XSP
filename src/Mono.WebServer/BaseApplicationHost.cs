@@ -43,15 +43,19 @@ namespace Mono.WebServer
 		string path;
 		string vpath;
 		readonly EndOfRequestHandler endOfRequest;
-		Dictionary <string, bool> handlersCache;		
+		Dictionary <string, bool> handlersCache;
 
-		public BaseApplicationHost ()
+        public string AppDomainAppVirtualPath { get; set; }
+
+        public BaseApplicationHost ()
 		{
 			endOfRequest = EndOfRequest;
 			AppDomain.CurrentDomain.DomainUnload += OnUnload;
-		}
 
-		public void Unload ()
+            AppDomainAppVirtualPath = HttpRuntime.AppDomainAppVirtualPath;
+        }
+
+        public void Unload ()
 		{
 			HttpRuntime.UnloadAppDomain ();
 		}
@@ -69,10 +73,14 @@ namespace Mono.WebServer
 
 		public ApplicationServer Server { get; set; }
 
-		public string Path {
+        public const string appPath = ".appPath";
+        public const string appVPath = ".appVPath";
+
+        public string Path {
 			get {
-				if (path == null)
-					path = AppDomain.CurrentDomain.GetData (".appPath").ToString ();
+                if (path == null)
+                    path = AppDomain.CurrentDomain.GetData(
+                        BaseApplicationHost.appPath).ToString(); // ".appPath").ToString ();
 
 				return path;
 			}
@@ -80,8 +88,9 @@ namespace Mono.WebServer
 
 		public string VPath {
 			get {
-				if (vpath == null)
-					vpath = AppDomain.CurrentDomain.GetData (".appVPath").ToString ();
+                if (vpath == null)
+                    vpath = AppDomain.CurrentDomain.GetData(
+                            BaseApplicationHost.appVPath).ToString(); // (".appVPath").ToString ();
 
 				return vpath;
 			}
@@ -127,9 +136,12 @@ namespace Mono.WebServer
 				if (brb != null)
 					brb.UnregisterRequest (mwr.RequestId);
 			}
-		}
 
-		public virtual bool IsHttpHandler (string verb, string uri)
+            // Clear on finish
+            System.Web.HttpContext.Current = null;
+        }
+
+        public virtual bool IsHttpHandler (string verb, string uri)
 		{
 			string cacheKey = verb + "_" + uri;
 
@@ -222,7 +234,7 @@ namespace Mono.WebServer
 
 					if (handlerPath.IndexOf ('*') == -1)
 					if (handlerPath [0] != '/') {
-						string vpath = HttpRuntime.AppDomainAppVirtualPath;
+						string vpath = HttpRuntime.AppDomainAppVirtualPath ?? this.AppDomainAppVirtualPath;
 
 						if (vpath == "/")
 							vpath = String.Empty;

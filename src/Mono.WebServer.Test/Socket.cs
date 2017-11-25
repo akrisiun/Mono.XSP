@@ -30,8 +30,8 @@ using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using Mono.Unix;
-using Mono.WebServer.FastCgi;
+//using Mono.Unix;
+//using Mono.WebServer.FastCgi;
 using NUnit.Framework;
 
 namespace Mono.WebServer.Test {
@@ -46,7 +46,9 @@ namespace Mono.WebServer.Test {
 		[Test]
 		public void TestPassUnixFd ()
 		{
-			using (ListenUnix (FASTCGI_SOCKET_PATH, FastCgiAccept))
+
+#if UNIX
+            using (ListenUnix (FASTCGI_SOCKET_PATH, FastCgiAccept))
 			using (ListenUnix (FPM_SOCKET_PATH, FpmUnixAccept)) {
 				var webserver = new UnixClient (FPM_SOCKET_PATH);
 				string read;
@@ -55,9 +57,12 @@ namespace Mono.WebServer.Test {
 					read = reader.ReadLine ();
 				Assert.AreEqual (MESSAGE, read);
 			}
-		}
+#else
+            throw new NotImplementedException("no Unix");
+#endif
+        }
 
-		[Test]
+        [Test]
 		public void TestPassTcpFd ()
 		{
 			using (ListenUnix (FASTCGI_SOCKET_PATH, FastCgiAccept)) {
@@ -77,13 +82,17 @@ namespace Mono.WebServer.Test {
 
 		static IDisposable ListenUnix (string path, AsyncCallback accept)
 		{
-			var socket = new UnixClient ();
+#if UNIX
+            var socket = new UnixClient ();
 			var client = socket.Client;
 			client.Bind (new UnixEndPoint (path));
 			client.Listen (1);
 			client.BeginAccept (accept, client);
 			return socket;
-		}
+#else
+            throw new NotImplementedException("no Unix");
+#endif
+        }
 
 		static Tuple<int,IDisposable> ListenTcp (AsyncCallback accept)
 		{
@@ -105,15 +114,19 @@ namespace Mono.WebServer.Test {
 			if (socket == null)
 				throw new ArgumentNullException ("state");
 
-			using (var connection = socket.EndAccept (res))
+#if UNIX
+            using (var connection = socket.EndAccept (res))
 			{
 				using (var stream = SocketPassing.ReceiveFrom (connection))
 				using (var writer = new StreamWriter(stream))
 					writer.WriteLine (MESSAGE);
 			}
-		}
+#else
+            throw new NotImplementedException("no Unix");
+#endif
+        }
 
-		static void FpmUnixAccept(IAsyncResult res)
+        static void FpmUnixAccept(IAsyncResult res)
 		{
 			if (!res.IsCompleted)
 				throw new ArgumentException("res");
@@ -122,13 +135,17 @@ namespace Mono.WebServer.Test {
 			if (socket == null)
 				throw new ArgumentNullException ("state");
 
-			using (var connection = socket.EndAccept (res)) {
+#if UNIX
+            using (var connection = socket.EndAccept (res)) {
 				var back = new UnixClient (FASTCGI_SOCKET_PATH);
 				SocketPassing.SendTo (back.Client, connection.Handle);
 			}
-		}
+#else
+            throw new NotImplementedException("no Unix");
+#endif
+        }
 
-		static void FpmTcpAccept(IAsyncResult res)
+        static void FpmTcpAccept(IAsyncResult res)
 		{
 			if (!res.IsCompleted)
 				throw new ArgumentException("res");
@@ -136,12 +153,15 @@ namespace Mono.WebServer.Test {
 			var socket = res.AsyncState as TcpListener;
 			if (socket == null)
 				throw new ArgumentNullException ("state");
-
-			using (var connection = socket.EndAcceptSocket (res)) {
+#if UNIX
+            using (var connection = socket.EndAcceptSocket (res)) {
 				var back = new UnixClient (FASTCGI_SOCKET_PATH);
 				SocketPassing.SendTo (back.Client, connection.Handle);
 			}
-		}
-	}
+#else
+            throw new NotImplementedException("no Unix");
+#endif
+        }
+    }
 }
 
