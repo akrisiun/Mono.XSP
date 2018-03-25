@@ -34,14 +34,20 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-  </PropertyGroup> 
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>mono.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Web" />
     <Reference Include="System.Configuration" />
     <Reference Include="Mono.Posix">
-        <HintPath>..\..\lib\Mono.Posix.dll</HintPath>
+      <HintPath>..\..\lib\Mono.Posix.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -101,7 +107,8 @@
     <Compile Include="Options\Settings\SettingSource.cs" />
     <Compile Include="Options\Settings\Parser.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Options\Settings\" />
+    <None Include="mono.snk" />
   </ItemGroup>
 </Project>

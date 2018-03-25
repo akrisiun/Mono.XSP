@@ -8,7 +8,7 @@
     <ProjectGuid>{0EACA9B4-922A-45AA-A59B-EEBAC752E9E0}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Mono.WebServer.XSP</RootNamespace>
-    <AssemblyName>Mono.WebServer.XSP</AssemblyName>
+    <AssemblyName>XSP5</AssemblyName>
     <TargetFrameworkVersion Condition="'$(OS)' == 'Windows_NT'">v4.6</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(OS)' != 'Windows_NT'">v4.6</TargetFrameworkVersion>
     <SignAssembly>false</SignAssembly>
@@ -19,26 +19,16 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\..\lib\</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <!--
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    -->
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.WebServer, Version=0.4.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
@@ -61,21 +51,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigurationManager.cs" />
-    <Compile Include="main.cs" />
-    <Compile Include="SecurityConfiguration.cs" />
-    <Compile Include="SslInformation.cs" />
-    <Compile Include="XSPApplicationHost.cs" />
-    <Compile Include="XSPRequestBroker.cs" />
-    <Compile Include="XSPWebSource.cs" />
-    <Compile Include="XSPWorker.cs" />
-    <Compile Include="XSPWorkerRequest.cs" />
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="CompatTuple.cs" />
+    <Compile Include="..\Mono.WebServer.XSP\ConfigurationManager.cs" />
+    <Compile Include="..\Mono.WebServer.XSP\main.cs" />
+    <Compile Include="..\Mono.WebServer.XSP\SecurityConfiguration.cs" />
+    <Compile Include="..\Mono.WebServer.XSP\SslInformation.cs" />
+    <Compile Include="..\Mono.WebServer.XSP\XSPApplicationHost.cs" />
+    <Compile Include="..\Mono.WebServer.XSP\XSPRequestBroker.cs" />
+    <Compile Include="..\Mono.WebServer.XSP\XSPWebSource.cs" />
+    <Compile Include="..\Mono.WebServer.XSP\XSPWorker.cs" />
+    <Compile Include="..\Mono.WebServer.XSP\XSPWorkerRequest.cs" />
+    <Compile Include="..\Mono.WebServer.XSP\AssemblyInfo.cs" />
+    <Compile Include="..\Mono.WebServer.XSP\CompatTuple.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
