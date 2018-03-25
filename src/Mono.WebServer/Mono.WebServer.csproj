@@ -1,19 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Library</OutputType>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<!-- <Project Sdk="Microsoft.NET.Sdk"> 
     <TargetFramework>net46</TargetFramework>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-
-<!--
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net46'">
     <DefineConstants>TRACE;DEBUG;NET46;NETCORE;</DefineConstants>
   </PropertyGroup>
--->  
+-->
   <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
@@ -65,7 +61,6 @@
     <!--
     <PackageReference Include="Mono.Security" Version="5.4.0.201" />
     <PackageReference Include="Mono.Posix" Version="4.0.0" />
-    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
     -->
   </ItemGroup>
   <ItemGroup>
@@ -130,4 +125,5 @@
   <ItemGroup>
     <None Include="mono.snk" />
   </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
