@@ -10,7 +10,8 @@ namespace Samples
 	{
 		public Application (HttpContext ctx)
 		{
-			SiteMapSection sms = WebConfigurationManager.GetSection ("system.web/siteMap") as SiteMapSection;
+			SiteMapSection sms = 
+				WebConfigurationManager.GetSection ("system.web/siteMap") as SiteMapSection;
 			if (sms != null)
 				sms.Enabled = true;
 		}

@@ -1,15 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net46</TargetFramework>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+<!--
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net46'">
+    <DefineConstants>TRACE;DEBUG;NET46;NETCORE;</DefineConstants>
+  </PropertyGroup>
+-->  
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5339C36C-A524-44CE-93BD-59A79F57B346}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <Version>4.4.0.0</Version>
     <RootNamespace>Mono.WebServer</RootNamespace>
     <AssemblyName>Mono.WebServer</AssemblyName>
     <!--
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5339C36C-A524-44CE-93BD-59A79F57B346}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
     -->
@@ -24,7 +38,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -33,12 +47,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
     <AssemblyOriginatorKeyFile>mono.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
@@ -46,12 +58,20 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Web" />
     <Reference Include="System.Configuration" />
+
     <Reference Include="Mono.Posix">
       <HintPath>..\..\lib\Mono.Posix.dll</HintPath>
     </Reference>
+    <!--
+    <PackageReference Include="Mono.Security" Version="5.4.0.201" />
+    <PackageReference Include="Mono.Posix" Version="4.0.0" />
+    <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+    -->
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <!--
+    <Compile Include="AssemblyInfo4.cs" />
+    -->
     <Compile Include="ApplicationServer.cs" />
     <Compile Include="BaseApplicationHost.cs" />
     <Compile Include="BaseRequestBroker.cs" />
@@ -90,7 +110,6 @@
     <Compile Include="WebTrace.cs" />
     <Compile Include="Log\FileLogger.cs" />
     <Compile Include="Log\ILogger.cs" />
-    <Compile Include="AssemblyInfo4.cs" />
     <Compile Include="IdentityToken.cs" />
     <Compile Include="Options\Settings\BoolSetting.cs" />
     <Compile Include="Options\Settings\Int32Setting.cs" />

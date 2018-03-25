@@ -1,6 +1,5 @@
 <%@ language="C#"%>
 <%@ Import namespace="System.IO" %>
-<%@ Register TagPrefix="mono" TagName="MonoSamplesHeader" src="~/controls/MonoSamplesHeader.ascx" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,14 +9,15 @@
     <link rel="stylesheet" type="text/css" href="/mono-xsp.css">
 </head>
 <body>
-    <mono:MonoSamplesHeader runat="server"/>
     <table style="width: 100%">
         <tr style="vertical-align: top">
             <td>
                 <form id="form1" runat="server">
                     <asp:SiteMapDataSource runat="server" id="SamplesSiteMap"/>
-                    <asp:TreeView style="margin:10px" id="TreeView2" runat="server" DataSourceId="SamplesSiteMap"
-                        EnableClientScript="true" PopulateNodesFromClient="false" ExpandDepth="2"/>
+                    <asp:TreeView style="margin:10px" id="TreeView2"
+                        runat="server" DataSourceId="SamplesSiteMap"
+                        EnableClientScript="true" 
+                        PopulateNodesFromClient="false" ExpandDepth="2"/>
                 </form>
             </td>
             <td>

@@ -1,54 +1,28 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>4.4.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0EACA9B4-922A-45AA-A59B-EEBAC752E9E0}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Mono.WebServer.XSP</RootNamespace>
-    <AssemblyName>XSP5</AssemblyName>
-    <TargetFrameworkVersion Condition="'$(OS)' == 'Windows_NT'">v4.6</TargetFrameworkVersion>
-    <TargetFrameworkVersion Condition="'$(OS)' != 'Windows_NT'">v4.6</TargetFrameworkVersion>
-    <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\lib\</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <TargetFramework>net46</TargetFramework>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release</OutputPath>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net46'">
+    <DefineConstants>TRACE;DEBUG;NET46;NETCORE;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mono.WebServer, Version=0.4.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+    <Reference Include="Mono.WebServer">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Mono.WebServer\bin\Mono.WebServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Configuration">
+    <Reference Include="System.Configuration" />
+    <!--
       <HintPath>..\lib\System.Configuration.dll</HintPath>
-    </Reference>
+    </Reference> -->
     <Reference Include="System.Xml" />
-    <Reference Include="Mono.Security" Condition="'$(OS)' != 'Windows_NT'" />
-    <Reference Include="Mono.Posix" Condition="'$(OS)' != 'Windows_NT'" />
-    <Reference Include="Mono.Posix" Condition="'$(OS)' == 'Windows_NT'">
-      <HintPath>..\..\lib\Mono.Posix.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Security" Condition="'$(OS)' == 'Windows_NT'">
-      <HintPath>..\..\lib\Mono.Security.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Mono.WebServer.XSP\ConfigurationManager.cs" />
@@ -60,11 +34,26 @@
     <Compile Include="..\Mono.WebServer.XSP\XSPWebSource.cs" />
     <Compile Include="..\Mono.WebServer.XSP\XSPWorker.cs" />
     <Compile Include="..\Mono.WebServer.XSP\XSPWorkerRequest.cs" />
-    <Compile Include="..\Mono.WebServer.XSP\AssemblyInfo.cs" />
+    <!-- <Compile Include="..\Mono.WebServer.XSP\AssemblyInfo.cs" />-->
     <Compile Include="..\Mono.WebServer.XSP\CompatTuple.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="Mono.Security" Condition="'$(OS)' == 'Windows_NT'">
+      <HintPath>..\..\lib\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Posix" Condition="'$(OS)' == 'Windows_NT'">
+      <HintPath>..\..\lib\Mono.Posix.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security" Condition="'$(OS)' != 'Windows_NT'" />
+    <Reference Include="Mono.Posix" Condition="'$(OS)' != 'Windows_NT'" />
+    <!--
+    <PackageReference Include="Mono.Security" Version="5.4.0.201" />
+    <PackageReference Include="Mono.Posix" Version="4.0.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
+    -->
+  </ItemGroup>
+
 </Project>

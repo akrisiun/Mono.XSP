@@ -397,7 +397,7 @@ namespace Mono.WebServer
 			
 			var ctx = HttpContext.Current?.Application;
 			HttpApplication app = null;
-			StateRuntime state = null;
+			// StateRuntime state = null;
 
 			string[] args = Environment.GetCommandLineArgs();
 			if (Debugger.IsAttached && args.Length >= 5)
