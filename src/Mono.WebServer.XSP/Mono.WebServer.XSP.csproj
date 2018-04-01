@@ -51,12 +51,17 @@
       <HintPath>..\lib\System.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="Mono.Security" Condition="'$(OS)' != 'Windows_NT'" />
-    <Reference Include="Mono.Posix" Condition="'$(OS)' != 'Windows_NT'" />
+    <Reference Include="Mono.Security" Condition="'$(OS)' != 'Windows_NT'">
+      <Private>true</Private>    
+    </Reference>
+    <Reference Include="Mono.Posix" Condition="'$(OS)' != 'Windows_NT'">
+    </Reference>
     <Reference Include="Mono.Posix" Condition="'$(OS)' == 'Windows_NT'">
+      <Private>true</Private>    
       <HintPath>..\..\lib\Mono.Posix.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Security" Condition="'$(OS)' == 'Windows_NT'">
+      <Private>true</Private>
       <HintPath>..\..\lib\Mono.Security.dll</HintPath>
     </Reference>
   </ItemGroup>
