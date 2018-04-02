@@ -1,15 +1,12 @@
 //
-// Mono.WebServer.IApplicationHost
+// WebSource.cs: Provides a shell implementation of Mono.WebServer.WebSource
+// for ApplicationServer to get the IApplicationHost type from.
 //
-// Authors:
-//	Gonzalo Paniagua Javier (gonzalo@ximian.com)
+// Author:
+//   Brian Nickel (brian.nickel@gmail.com)
 //
-// Documentation:
-//	Brian Nickel
-//
-// (C) 2003 Ximian, Inc (http://www.ximian.com)
-// (C) Copyright 2004-2010 Novell, Inc
-//
+// Copyright (C) 2007 Brian Nickel
+// 
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
 // "Software"), to deal in the Software without restriction, including
@@ -30,21 +27,33 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-using System;
-
-namespace Mono.WebServer
-{
-    public interface IApplicationHost
-    {
-        string Path { get; }
-        string VPath { get; }
-        AppDomain Domain { get; }
-        IRequestBroker RequestBroker { get; set; }
-        ApplicationServer Server { get; set; }
-        void Unload();
-        bool IsHttpHandler(string verb, string uri);
-
-        string AppDomainAppVirtualPath { get; set; }
-    }
+namespace Mono.WebServer.FastCgi {
+	
+	// FIXME: This class could be removed if
+	// Mono.WebServer.ApplicationServer is broken into two classes:
+	//     * ApplicationManager to handle application hosts, and
+	//     * ApplicationServer, a subclass of ApplicationManager that
+	//       adds on server support.
+	
+	public class WebSource : WebServer.WebSource {
+		public override IRequestBroker CreateRequestBroker()
+		{
+			return null;
+		}
+		
+		public override System.Type GetApplicationHostType()
+		{
+			return typeof(ApplicationHost);
+		}
+		
+		public override Worker CreateWorker(System.Net.Sockets.Socket socket, ApplicationServer server)
+		{
+			return null;
+		}
+		
+		public override System.Net.Sockets.Socket CreateSocket()
+		{
+			return null;
+		}
+	}
 }

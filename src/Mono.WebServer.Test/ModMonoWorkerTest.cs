@@ -1,14 +1,10 @@
 //
-// Mono.WebServer.IApplicationHost
+// ModMonoWorkerTest.cs
 //
-// Authors:
-//	Gonzalo Paniagua Javier (gonzalo@ximian.com)
+// Author:
+//   Leonardo Taglialegne <leonardo.taglialegne@gmail.com>
 //
-// Documentation:
-//	Brian Nickel
-//
-// (C) 2003 Ximian, Inc (http://www.ximian.com)
-// (C) Copyright 2004-2010 Novell, Inc
+// Copyright (c) 2013 Leonardo Taglialegne.
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -17,10 +13,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -30,21 +26,36 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
+using NUnit.Framework;
 using System;
+#if APACHE 
 
-namespace Mono.WebServer
-{
-    public interface IApplicationHost
-    {
-        string Path { get; }
-        string VPath { get; }
-        AppDomain Domain { get; }
-        IRequestBroker RequestBroker { get; set; }
-        ApplicationServer Server { get; set; }
-        void Unload();
-        bool IsHttpHandler(string verb, string uri);
+using Mono.WebServer.Apache;
+using System.IO;
 
-        string AppDomainAppVirtualPath { get; set; }
-    }
+namespace Mono.WebServer.Test {
+	[TestFixture]
+	public class ModMonoWorkerTest
+	{
+		[Test]
+		public void TestGetOrCreateApplication ()
+		{
+			if (!File.Exists ("/chroot"))
+				Assert.Fail ("This is not the correct chroot");
+			string temp_dir = Path.GetTempPath ();
+
+			string final_vdir;
+			string final_pdir;
+
+			// ModMonoWorker.GetPhysicalDirectory (temp_dir, temp_dir, out final_vdir, out final_pdir);
+		}
+
+		static void AppendSeparator (ref string nested_dir)
+		{
+			if (!nested_dir.EndsWith (Path.DirectorySeparatorChar.ToString (), StringComparison.Ordinal))
+				nested_dir += Path.DirectorySeparatorChar;
+		}
+	}
 }
+
+#endif

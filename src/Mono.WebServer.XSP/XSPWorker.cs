@@ -149,7 +149,7 @@ namespace Mono.WebServer.XSP
 		{
             var dll = AppDomain.CurrentDomain.GetData("Web.DLL") as string;
 
-            RequestData rdata = initial.RequestData;
+			RequestData rdata = initial.RequestData;
 			initial.FreeBuffer ();
 			string vhost = null; // TODO: read the headers in InitialWorkerRequest
 			int port = localEP.Port;
@@ -201,8 +201,12 @@ namespace Mono.WebServer.XSP
 				// This is ok (including EndOfStreamException)
 			} catch (Exception e) {
 				Logger.Write (e);
-			}
-		}
+#if !UNIX
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+#endif
+            }
+        }
 
 		public override int Read (byte[] buffer, int position, int size)
 		{

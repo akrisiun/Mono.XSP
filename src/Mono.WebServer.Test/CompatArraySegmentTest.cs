@@ -1,14 +1,10 @@
 //
-// Mono.WebServer.IApplicationHost
+// CompatArraySegmentTest.cs
 //
-// Authors:
-//	Gonzalo Paniagua Javier (gonzalo@ximian.com)
+// Author:
+//   Leonardo Taglialegne <leonardo.taglialegne@gmail.com>
 //
-// Documentation:
-//	Brian Nickel
-//
-// (C) 2003 Ximian, Inc (http://www.ximian.com)
-// (C) Copyright 2004-2010 Novell, Inc
+// Copyright (c) 2013 Leonardo Taglialegne.
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -17,10 +13,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -30,21 +26,34 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
+//using Mono.WebServer.FastCgi.Compatibility;
+using NUnit.Framework;
 using System;
 
-namespace Mono.WebServer
-{
-    public interface IApplicationHost
-    {
-        string Path { get; }
-        string VPath { get; }
-        AppDomain Domain { get; }
-        IRequestBroker RequestBroker { get; set; }
-        ApplicationServer Server { get; set; }
-        void Unload();
-        bool IsHttpHandler(string verb, string uri);
+namespace Mono.WebServer.Test {
+	
+	// [TestFixture]
+	public class CompatArraySegmentTest
+	{
+		[Test]
+		public void TestCase ()
+		{
+#if UNIX
+            var test = new CompatArraySegment<int> (new int[1]);
 
-        string AppDomainAppVirtualPath { get; set; }
+			test [0] = -3;
+			Assert.AreEqual (-3, test [0]);
+
+			try {
+				var test2 = new CompatArraySegment<int> (new int[1]);
+				test2 [1] = 0;
+				Assert.Fail ("Out of range access");
+			} catch (ArgumentOutOfRangeException) {
+			}
+#else
+            throw new NotImplementedException("no Unix");
+#endif
+        }
     }
 }
+

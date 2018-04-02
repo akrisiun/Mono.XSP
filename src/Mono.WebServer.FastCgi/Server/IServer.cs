@@ -1,14 +1,10 @@
 //
-// Mono.WebServer.IApplicationHost
+// IServer.cs
 //
-// Authors:
-//	Gonzalo Paniagua Javier (gonzalo@ximian.com)
+// Author:
+//   Leonardo Taglialegne <leonardo.taglialegne@gmail.com>
 //
-// Documentation:
-//	Brian Nickel
-//
-// (C) 2003 Ximian, Inc (http://www.ximian.com)
-// (C) Copyright 2004-2010 Novell, Inc
+// Copyright (c) 2013 Leonardo Taglialegne.
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -17,10 +13,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -30,21 +26,15 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
 using System;
 
-namespace Mono.WebServer
+namespace Mono.WebServer.FastCgi
 {
-    public interface IApplicationHost
-    {
-        string Path { get; }
-        string VPath { get; }
-        AppDomain Domain { get; }
-        IRequestBroker RequestBroker { get; set; }
-        ApplicationServer Server { get; set; }
-        void Unload();
-        bool IsHttpHandler(string verb, string uri);
+	public interface IServer
+	{
+		event EventHandler RequestReceived;
 
-        string AppDomainAppVirtualPath { get; set; }
-    }
+		bool Start (bool background, int backlog);
+		void Stop ();
+	}
 }

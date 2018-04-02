@@ -1,15 +1,12 @@
 //
-// Mono.WebServer.IApplicationHost
+// ConfigurationManager.cs: Generic multi-source configuration manager.
 //
-// Authors:
-//	Gonzalo Paniagua Javier (gonzalo@ximian.com)
+// Author:
+//   Brian Nickel (brian.nickel@gmail.com)
+//   Robert Jordan <robertj@gmx.net>
 //
-// Documentation:
-//	Brian Nickel
-//
-// (C) 2003 Ximian, Inc (http://www.ximian.com)
-// (C) Copyright 2004-2010 Novell, Inc
-//
+// Copyright (C) 2007 Brian Nickel
+// 
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
 // "Software"), to deal in the Software without restriction, including
@@ -30,21 +27,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
 using System;
+using Mono.WebServer.Options.Settings;
+using Mono.WebServer.Options;
 
-namespace Mono.WebServer
-{
-    public interface IApplicationHost
-    {
-        string Path { get; }
-        string VPath { get; }
-        AppDomain Domain { get; }
-        IRequestBroker RequestBroker { get; set; }
-        ApplicationServer Server { get; set; }
-        void Unload();
-        bool IsHttpHandler(string verb, string uri);
-
-        string AppDomainAppVirtualPath { get; set; }
-    }
+namespace Mono.WebServer.FastCgi {
+	public partial class ConfigurationManager : ServerConfigurationManager 
+	{
+	  
+	}
 }

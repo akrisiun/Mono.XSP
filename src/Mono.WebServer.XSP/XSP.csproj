@@ -3,26 +3,23 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>4.4.0</ProductVersion>
+    <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0EACA9B4-922A-45AA-A59B-EEBAC752E9E0}</ProjectGuid>
+    <ProjectGuid>{564FE347-84AD-4F2A-B5F0-49E9143174E8}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Mono.WebServer.XSP</RootNamespace>
-<!--
-    <RuntimeIdentifiers>win7-x64;osx.10.11-x64;ubuntu.16.04-x64</RuntimeIdentifiers>
--->
-    <AssemblyName>XSP5</AssemblyName>
+    <AssemblyName>XSP</AssemblyName>
     <TargetFrameworkVersion Condition="'$(OS)' == 'Windows_NT'">v4.6</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(OS)' != 'Windows_NT'">v4.6</TargetFrameworkVersion>
-    <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
+    <!-- <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile> -->
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\lib\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -30,20 +27,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release</OutputPath>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mono.WebServer, Version=0.4.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Mono.WebServer\bin\Mono.WebServer.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Configuration">
-      <HintPath>..\lib\System.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
     <Reference Include="Mono.Security" Condition="'$(OS)' != 'Windows_NT'" />
     <Reference Include="Mono.Posix" Condition="'$(OS)' != 'Windows_NT'" />
     <Reference Include="Mono.Posix" Condition="'$(OS)' == 'Windows_NT'">
@@ -54,20 +41,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Mono.WebServer.XSP\ConfigurationManager.cs" />
-    <Compile Include="..\Mono.WebServer.XSP\main.cs" />
-    <Compile Include="..\Mono.WebServer.XSP\SecurityConfiguration.cs" />
-    <Compile Include="..\Mono.WebServer.XSP\SslInformation.cs" />
-    <Compile Include="..\Mono.WebServer.XSP\XSPApplicationHost.cs" />
-    <Compile Include="..\Mono.WebServer.XSP\XSPRequestBroker.cs" />
-    <Compile Include="..\Mono.WebServer.XSP\XSPWebSource.cs" />
-    <Compile Include="..\Mono.WebServer.XSP\XSPWorker.cs" />
-    <Compile Include="..\Mono.WebServer.XSP\XSPWorkerRequest.cs" />
-    <Compile Include="..\Mono.WebServer.XSP\AssemblyInfo.cs" />
-    <Compile Include="..\Mono.WebServer.XSP\CompatTuple.cs" />
+    <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="main.cs" />
+    <Compile Include="SecurityConfiguration.cs" />
+    <Compile Include="SslInformation.cs" />
+    <Compile Include="XSPApplicationHost.cs" />
+    <Compile Include="XSPRequestBroker.cs" />
+    <Compile Include="XSPWebSource.cs" />
+    <Compile Include="XSPWorker.cs" />
+    <Compile Include="XSPWorkerRequest.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="CompatTuple.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mono.WebServer\Mono.WebServer.csproj">
+      <Project>{5339c36c-a524-44ce-93bd-59a79f57b346}</Project>
+      <Name>Mono.WebServer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

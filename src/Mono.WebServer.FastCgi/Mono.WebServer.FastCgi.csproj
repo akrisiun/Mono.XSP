@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6A65EE42-6B11-40F4-8E3C-B40E4AB21001}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Mono.WebServer.FastCgi</RootNamespace>
+    <AssemblyName>fastcgi-mono-server4</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnvironmentVariables>
+      <EnvironmentVariables>
+        <Variable name="MONO_PATH" value="." />
+      </EnvironmentVariables>
+    </EnvironmentVariables>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    
+    <Reference Include="Mono.Posix">
+        <HintPath>..\..\lib\Mono.Posix.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security">
+        <HintPath>..\..\lib\Mono.Security.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="ApplicationHost.cs" />
+    <Compile Include="BeginRequestBody.cs" />
+    <Compile Include="Connection.cs" />
+    <Compile Include="EndRequestBody.cs" />
+    <Compile Include="main.cs" />
+    <Compile Include="NameValuePair.cs" />
+    <Compile Include="Request.cs" />
+    <Compile Include="Responder.cs" />
+    <Compile Include="ResponderRequest.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="Server\ConnectionProxy.cs" />
+    <Compile Include="Strings.cs" />
+    <Compile Include="UnknownTypeBody.cs" />
+    <Compile Include="WebSource.cs" />
+    <Compile Include="WorkerRequest.cs" />
+    <Compile Include="DictionaryExtensions.cs" />
+    <Compile Include="Watchdog.cs" />
+    <Compile Include="BufferManager.cs" />
+    <Compile Include="RecordType.cs" />
+    <Compile Include="Compatibility\CompatArraySegment.cs" />
+    <Compile Include="Compatibility\IReadOnlyCollection.cs" />
+    <Compile Include="Compatibility\IReadOnlyList.cs" />
+    <Compile Include="Buffers.cs" />
+    <Compile Include="Server\GenericServer.cs" />
+    <Compile Include="Server\ServerProxy.cs" />
+    <Compile Include="Server\IConnection.cs" />
+    <Compile Include="Server\IServerCallback.cs" />
+    <Compile Include="Compatibility\ArrayExtensions.cs" />
+    <Compile Include="Server\IServer.cs" />
+    <Compile Include="Server\SocketPassing.cs" />
+    <Compile Include="Server\OnDemandServer.cs" />
+    <Compile Include="Server\FakeGenericServer.cs" />
+    <Compile Include="Server\IGenericServer.cs" />
+    <Compile Include="Obsolete\SocketFactory.cs" />
+    <Compile Include="Obsolete\ConfigurationManager.cs" />
+    <Compile Include="ConfigurationManager.cs" />
+    <Compile Include="ConfigurationManager.Obsolete.cs" />
+    <Compile Include="Obsolete\Record.cs" />
+    <Compile Include="Record.cs" />
+    <Compile Include="Sockets\TcpSocket.cs" />
+    <Compile Include="Sockets\StandardSocket.cs" />
+    <Compile Include="Sockets\UnmanagedSocket.cs" />
+    <Compile Include="Sockets\UnixSocket.cs" />
+    <Compile Include="Sockets\Socket.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mono.WebServer\Mono.WebServer.csproj">
+      <Project>{5339C36C-A524-44CE-93BD-59A79F57B346}</Project>
+      <Name>Mono.WebServer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup />
+  <ItemGroup />
+</Project>

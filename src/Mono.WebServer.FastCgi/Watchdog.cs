@@ -1,14 +1,10 @@
 //
-// Mono.WebServer.IApplicationHost
+// Watchdog.cs: A generic watchdog
 //
 // Authors:
-//	Gonzalo Paniagua Javier (gonzalo@ximian.com)
+//   Leonardo Taglialegne <leonardo.taglialegne@gmail.com>
 //
-// Documentation:
-//	Brian Nickel
-//
-// (C) 2003 Ximian, Inc (http://www.ximian.com)
-// (C) Copyright 2004-2010 Novell, Inc
+// (C) Copyright 2013 Leonardo Taglialegne
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -30,21 +26,61 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using System.Timers;
 
-using System;
-
-namespace Mono.WebServer
+namespace Mono.WebServer.FastCgi
 {
-    public interface IApplicationHost
-    {
-        string Path { get; }
-        string VPath { get; }
-        AppDomain Domain { get; }
-        IRequestBroker RequestBroker { get; set; }
-        ApplicationServer Server { get; set; }
-        void Unload();
-        bool IsHttpHandler(string verb, string uri);
+	class Watchdog
+	{
+		/// <summary>
+		/// Gets the timeout.
+		/// </summary>
+		/// <value>The timeout, in milliseconds.</value>
+		public double Timeout {
+			get;
+			private set;
+		}
 
-        string AppDomainAppVirtualPath { get; set; }
-    }
+		public event ElapsedEventHandler End;
+
+		Timer timer;
+
+		readonly object end_lock = new object ();
+
+		bool ended;
+
+		/// <param name="timeout">Timeout, in milliseconds.</param>
+		public Watchdog(double timeout)
+		{
+			Timeout = timeout;
+			timer = CreateTimer (timeout);
+		}
+
+		public void Kick()
+		{
+			lock (end_lock) {
+				if (ended)
+					return;
+
+				timer.Dispose ();
+				timer = CreateTimer (Timeout);
+			}
+		}
+
+		Timer CreateTimer (double timeout)
+		{
+			var toret = new Timer (timeout) {
+				AutoReset = false
+			};
+			toret.Elapsed += (sender, args) =>  {
+				lock (end_lock) {
+					ended = true;
+				}
+				if (End != null)
+					End (sender, args);
+			};
+			toret.Start ();
+			return toret;
+		}
+	}
 }

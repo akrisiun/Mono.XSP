@@ -1,15 +1,11 @@
 //
-// Mono.WebServer.IApplicationHost
+// Record.cs: Represents the FastCGI BeginRequestBody structure.
 //
-// Authors:
-//	Gonzalo Paniagua Javier (gonzalo@ximian.com)
+// Author:
+//   Brian Nickel (brian.nickel@gmail.com)
 //
-// Documentation:
-//	Brian Nickel
-//
-// (C) 2003 Ximian, Inc (http://www.ximian.com)
-// (C) Copyright 2004-2010 Novell, Inc
-//
+// Copyright (C) 2007 Brian Nickel
+// 
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
 // "Software"), to deal in the Software without restriction, including
@@ -30,21 +26,38 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-using System;
-
-namespace Mono.WebServer
-{
-    public interface IApplicationHost
-    {
-        string Path { get; }
-        string VPath { get; }
-        AppDomain Domain { get; }
-        IRequestBroker RequestBroker { get; set; }
-        ApplicationServer Server { get; set; }
-        void Unload();
-        bool IsHttpHandler(string verb, string uri);
-
-        string AppDomainAppVirtualPath { get; set; }
-    }
+namespace Mono.FastCgi {
+	public struct UnknownTypeBody
+	{
+		#region Private Fields
+		
+		readonly RecordType type;
+		
+		#endregion
+		
+		
+		
+		#region Constructors
+		
+		public UnknownTypeBody (RecordType unknownType)
+		{
+			type = unknownType;
+		}
+		
+		#endregion
+		
+		
+		
+		#region Public Methods
+		
+		public byte [] GetData ()
+		{
+			// TODO: Investigate caching this
+			var data = new byte [8];
+			data [0] = (byte) type;
+			return data;
+		}
+		
+		#endregion
+	}
 }
