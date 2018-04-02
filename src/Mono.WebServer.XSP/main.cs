@@ -187,7 +187,8 @@ namespace Mono.WebServer.XSP
 				if (configurationManager.RandomPort && !configurationManager.Quiet)
 					Logger.Write (LogLevel.Notice, "Random port: {0}", server.Port);
 				
-				if (!configurationManager.NonStop) {
+				if (!configurationManager.NonStop) 
+				{
 					if (!configurationManager.Quiet)
 						Console.WriteLine ("Hit Return to stop the server.");
 

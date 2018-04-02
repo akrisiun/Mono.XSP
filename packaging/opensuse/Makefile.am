@@ -1,1 +1,0 @@
-EXTRA_DIST = xsp2.init xsp2.fw sysconfig.xsp2 xsp2.logrotate
