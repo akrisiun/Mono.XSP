@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-<!-- <Project Sdk="Microsoft.NET.Sdk"> 
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
--->
-  <PropertyGroup>
+
     <OutputType>Exe</OutputType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -14,13 +13,21 @@
     <AssemblyName>xsp5</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
 
+    <!-- dotnet core workarounds -->
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
-    <OutputPath>bin</OutputPath>
+    <OutputPath>..\bin\</OutputPath>
+    <StartupObject>Mono.WebServer.XSP.Server</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net46'">
     <DefineConstants>TRACE;DEBUG;NET46;NETCORE;</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.WebServer">
@@ -32,7 +39,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Configuration" />
     <!--
-      <HintPath>..\lib\System.Configuration.dll</HintPath>
+    <HintPath>..\lib\System.Configuration.dll</HintPath>
     </Reference> -->
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -48,6 +55,7 @@
     <Compile Include="..\Mono.WebServer.XSP\XSPWorkerRequest.cs" />
     <!-- <Compile Include="..\Mono.WebServer.XSP\AssemblyInfo.cs" />-->
     <Compile Include="..\Mono.WebServer.XSP\CompatTuple.cs" />
+    <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -67,5 +75,5 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
     -->
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!--<Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />-->
 </Project>

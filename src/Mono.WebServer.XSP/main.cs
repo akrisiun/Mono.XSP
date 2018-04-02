@@ -136,6 +136,9 @@ namespace Mono.WebServer.XSP
                 return success;
             }
 
+            if (Debugger.IsAttached)
+                Debugger.Break();
+
             if (!configurationManager.LoadConfigFile())
                 return new CompatTuple<int, string, ApplicationServer>(1, "Error while loading the configuration file", null);
 

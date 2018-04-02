@@ -574,9 +574,9 @@ namespace System
         {
             // We can't just use our parameters because we need to ensure that the strings used for hte QCall
             // are on the stack.
+            /*
             string localAssembly = null;
             string localType = null;
-            /*
             GetAppDomainManagerType(GetNativeHandle(),
                                     JitHelpers.GetStringHandleOnStack(ref localAssembly),
                                     JitHelpers.GetStringHandleOnStack(ref localType));

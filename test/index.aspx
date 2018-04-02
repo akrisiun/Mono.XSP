@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/mono-xsp.css">
 </head>
 <body>
-    <h3>MONO xsp5 test | <a href="netversion.aspx">netversion.asxp - dll diag</a>
+    <h3>MONO xsp5 test | <a href="netversion.aspx">netversion.aspx - dll diag</a>
     </h3>
     <table style="width: 100%">
         <tr style="vertical-align: top">

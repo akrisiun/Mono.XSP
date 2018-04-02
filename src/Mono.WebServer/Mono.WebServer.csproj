@@ -12,10 +12,23 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    
     <ProductVersion>10.0.0</ProductVersion>
     <Version>4.4.0.0</Version>
     <RootNamespace>Mono.WebServer</RootNamespace>
     <AssemblyName>Mono.WebServer</AssemblyName>
+
+    <!-- dotnet core workarounds -->
+    <Configurations>Debug;Release</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">net46</TargetFrameworks>
+    <RuntimeIdentifiers>win;win-x86;win-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers Condition="'$(OS)' != 'Windows_NT'">win7-x64;osx.10-11-x64;ubuntu.16.04-x64</RuntimeIdentifiers>    
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <!-- Nuget stuff and workarounds -->
+    <RestorePackages>true</RestorePackages>
+    <ContinueOnError>true</ContinueOnError>
+    
     <!--
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5339C36C-A524-44CE-93BD-59A79F57B346}</ProjectGuid>
