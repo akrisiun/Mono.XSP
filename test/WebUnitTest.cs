@@ -2,6 +2,7 @@ using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
 using System.Diagnostics;
+using System.IO;
 
 namespace test
 {
@@ -39,7 +40,15 @@ namespace test
             var psi = new ProcessStartInfo();
             // psi.FileName = "@powershell";
             // psi.Arguments = $"-file {ps1}";
-            psi.FileName = @"C:\Program Files\Mono\bin\mono.exe";
+            // psi.FileName = @"C:\Program Files\Mono\bin\mono.exe";
+
+            Console.WriteLine($"Dir = {Environment.CurrentDirectory}");
+            var bs = Path.DirectorySeparatorChar.ToString();
+            var mono = Path.GetFullPath(Environment.CurrentDirectory  + bs + @"mono.exe");
+            Console.WriteLine($"mono: {mono}");
+
+            psi.FileName = mono;
+
             psi.Arguments = argParm;
 
             var p = new Process { StartInfo = psi };
