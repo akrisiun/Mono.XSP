@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Web.ApplicationServi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Security-net_4_x", "..\mono\mcs\class\Mono.Security\Mono.Security-net_4_x.csproj", "{42D59DE7-586F-4ACF-BDD5-E7869E39E3EF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test", "test\test.csproj", "{D15AC86F-A15C-49C8-9C5D-BAC08ACD6888}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -161,6 +163,10 @@ Global
 		{42D59DE7-586F-4ACF-BDD5-E7869E39E3EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42D59DE7-586F-4ACF-BDD5-E7869E39E3EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42D59DE7-586F-4ACF-BDD5-E7869E39E3EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D15AC86F-A15C-49C8-9C5D-BAC08ACD6888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D15AC86F-A15C-49C8-9C5D-BAC08ACD6888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D15AC86F-A15C-49C8-9C5D-BAC08ACD6888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D15AC86F-A15C-49C8-9C5D-BAC08ACD6888}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

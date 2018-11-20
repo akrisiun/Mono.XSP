@@ -15,6 +15,21 @@
     <AssemblyName>Mono.WebServer.XSP</AssemblyName>
     <TargetFrameworkVersion Condition="'$(OS)' == 'Windows_NT'">v4.8</TargetFrameworkVersion>
     <TargetFrameworkVersion Condition="'$(OS)' != 'Windows_NT'">v4.5</TargetFrameworkVersion>
+
+    <!-- dotnet core workarounds -->
+    <Configurations>Debug</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">net46</TargetFrameworks>
+    <RuntimeIdentifiers>win;win-x86;win-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers Condition="'$(OS)' != 'Windows_NT'">win7-x64;osx.10-11-x64;ubuntu.16.04-x64</RuntimeIdentifiers>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <!-- Nuget stuff and workarounds -->
+    <RestorePackages>true</RestorePackages>
+    <ContinueOnError>true</ContinueOnError>
+
+    <GenerateTargetFrameworkAttribute>true</GenerateTargetFrameworkAttribute>
+    <NoStdLib>True</NoStdLib>
+    <NoConfig>True</NoConfig>
     
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
@@ -45,7 +60,67 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <!--<Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Configuration" />-->
+
+    <Reference Include="System" HintPath="..\..\..\mono\mcs\class\lib\net_4_x\System.dll" Private="true" />
+
+    <Reference Include="System.Configuration">
+      <HintPath>..\..\..\mono\mcs\class\lib\net_4_x\System.Configuration.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="System.Core" HintPath="..\..\..\mono\mcs\class\lib\net_4_x\System.Core.dll" Private="true" />
+    <Reference Include="Accessibility">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\Accessibility.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="Mono.Data.Sqlite">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\Mono.Data.Sqlite.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="Mono.Data.Tds">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\Mono.Data.Tds.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="Mono.Posix">
+      <HintPath>..\..\lib\Mono.Posix.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\Mono.Security.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\System.ComponentModel.DataAnnotations.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\System.Drawing.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\System.Runtime.Serialization.Formatters.Soap.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>true</Private>
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\System.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices">
+      <Private>true</Private>
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\System.Web.ApplicationServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Services">
+      <Private>true</Private>
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\System.Web.Services.dll</HintPath>
+    </Reference>
+    <!--
+    <PackageReference Include="Mono.Security" Version="5.4.0.201" />
+    <PackageReference Include="Mono.Posix" Version="4.0.0" />
+    -->
+    <!--<Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="Mono.Security" Condition="'$(OS)' != 'Windows_NT'">
       <Private>true</Private>
@@ -59,7 +134,7 @@
     <Reference Include="Mono.Security" Condition="'$(OS)' == 'Windows_NT'">
       <Private>true</Private>
       <HintPath>..\..\lib\Mono.Security.dll</HintPath>
-    </Reference>
+    </Reference>-->
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationManager.cs" />
@@ -79,6 +154,7 @@
     <None Include="web.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\mono\mcs\class\corlib\corlib-net_4_x.csproj" />
     <ProjectReference Include="..\Mono.WebServer\Mono.WebServer.csproj">
       <Project>{5339c36c-a524-44ce-93bd-59a79f57b346}</Project>
       <Name>Mono.WebServer</Name>

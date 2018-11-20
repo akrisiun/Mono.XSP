@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net46</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <IsPackable>false</IsPackable>
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
@@ -9,23 +9,30 @@
 
     <!--<StartupObject></StartupObject>-->
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="1.1\**" />
+    <EmbeddedResource Remove="1.1\**" />
+    <None Remove="1.1\**" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="Mono.WebServer">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\src\Mono.WebServer\bin\Mono.WebServer.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.WebServer.XSP">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\src\Mono.WebServer.XSP\bin\Mono.WebServer.XSP.exe</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Configuration" />
 
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\mono\mcs\class\corlib\corlib-net_4_x.csproj" />
+    <ProjectReference Include="..\..\mono\mcs\System.Web\System.Web.csproj" />
+    <ProjectReference Include="..\src\Mono.WebServer.XSP\Mono.WebServer.XSP.csproj" />
+    <ProjectReference Include="..\src\Mono.WebServer\Mono.WebServer.csproj" />
   </ItemGroup>
 
 </Project>
