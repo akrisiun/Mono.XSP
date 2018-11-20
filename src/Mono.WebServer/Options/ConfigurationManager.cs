@@ -66,7 +66,7 @@ namespace Mono.WebServer.Options {
 			return true;
 		}
 		
-		[Obsolete]
+		// [Obsolete]
 		public void ImportSettings (XmlDocument doc, bool insertEmptyValue)
 		{
 			ImportSettings (doc, insertEmptyValue, null);

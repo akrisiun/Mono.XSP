@@ -3,20 +3,23 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net48</TargetFramework>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    
+    
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0EACA9B4-922A-45AA-A59B-EEBAC752E9E0}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Mono.WebServer.XSP</RootNamespace>
     <AssemblyName>Mono.WebServer.XSP</AssemblyName>
-    <TargetFrameworkVersion Condition="'$(OS)' == 'Windows_NT'">v4.6</TargetFrameworkVersion>
-    <TargetFrameworkVersion Condition="'$(OS)' != 'Windows_NT'">v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(OS)' == 'Windows_NT'">v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(OS)' != 'Windows_NT'">v4.5</TargetFrameworkVersion>
+    
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
-    <TargetFrameworkProfile />
-
     <!-- dotnet core workarounds -->
-    <Configurations>Debug;Release</Configurations>
+    <Configurations>Debug</Configurations>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -43,18 +46,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Configuration">
-      <HintPath>..\lib\System.Configuration.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Mono.Security" Condition="'$(OS)' != 'Windows_NT'">
-      <Private>true</Private>    
+      <Private>true</Private>
     </Reference>
     <Reference Include="Mono.Posix" Condition="'$(OS)' != 'Windows_NT'">
     </Reference>
     <Reference Include="Mono.Posix" Condition="'$(OS)' == 'Windows_NT'">
-      <Private>true</Private>    
+      <Private>true</Private>
       <HintPath>..\..\lib\Mono.Posix.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Security" Condition="'$(OS)' == 'Windows_NT'">

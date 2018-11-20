@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 <!-- <Project Sdk="Microsoft.NET.Sdk"> 
     <TargetFramework>net46</TargetFramework>
@@ -8,6 +8,11 @@
   </PropertyGroup>
 -->
   <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <TargetFramework>net48</TargetFramework>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+
     <OutputType>Library</OutputType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -28,8 +33,14 @@
     <!-- Nuget stuff and workarounds -->
     <RestorePackages>true</RestorePackages>
     <ContinueOnError>true</ContinueOnError>
-    
+
+    <GenerateTargetFrameworkAttribute>true</GenerateTargetFrameworkAttribute>
+    <NoStdLib>True</NoStdLib>
+    <NoConfig>True</NoConfig>
+
+
     <!--
+    e:\Beta\mono\mcs\System.Web\bin\net48\System.Web.dll
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5339C36C-A524-44CE-93BD-59A79F57B346}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -47,29 +58,62 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-  </PropertyGroup>
+  
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>mono.snk</AssemblyOriginatorKeyFile>
+    <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <!--<Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration" />-->
+
+    <Reference Include="Accessibility">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\Accessibility.dll</HintPath>
+    </Reference>
+
+    <Reference Include="Mono.Data.Sqlite">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\Mono.Data.Sqlite.dll</HintPath>
+    </Reference>
+
+    <Reference Include="Mono.Data.Tds">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\Mono.Data.Tds.dll</HintPath>
+    </Reference>
 
     <Reference Include="Mono.Posix">
       <HintPath>..\..\lib\Mono.Posix.dll</HintPath>
+    </Reference>
+
+    <Reference Include="Mono.Security">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\Mono.Security.dll</HintPath>
+    </Reference>
+
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\System.ComponentModel.DataAnnotations.dll</HintPath>
+    </Reference>
+
+    <Reference Include="System.Drawing">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\System.Drawing.dll</HintPath>
+    </Reference>
+
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\System.Runtime.Serialization.Formatters.Soap.dll</HintPath>
+    </Reference>
+
+    <Reference Include="System.Web">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\System.Web.dll</HintPath>
+    </Reference>
+
+    <Reference Include="System.Web.ApplicationServices">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\System.Web.ApplicationServices.dll</HintPath>
+    </Reference>
+
+    <Reference Include="System.Web.Services">
+      <HintPath>..\..\..\mono\mcs\System.Web\bin\net48\System.Web.Services.dll</HintPath>
     </Reference>
     <!--
     <PackageReference Include="Mono.Security" Version="5.4.0.201" />
@@ -134,9 +178,15 @@
     <Compile Include="Options\Settings\SettingSource.cs" />
     <Compile Include="Options\Settings\Parser.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="mono.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\mono\mcs\class\corlib\corlib-net_4_x.csproj" />
+    <ProjectReference Include="..\..\..\mono\mcs\class\System.Configuration\System.Configuration-net_4_x.csproj" />
+    <ProjectReference Include="..\..\..\mono\mcs\class\System.Core\System.Core-net_4_x.csproj" />
+    <ProjectReference Include="..\..\..\mono\mcs\class\System.XML\System.Xml-net_4_x.csproj" />
+    <ProjectReference Include="..\..\..\mono\mcs\class\System\System-net_4_x.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
