@@ -28,7 +28,7 @@
     <!--<RuntimeMetadataVersion>MONO</RuntimeMetadataVersion>-->
 
 
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   
