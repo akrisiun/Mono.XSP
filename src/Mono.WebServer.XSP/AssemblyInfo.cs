@@ -28,11 +28,12 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyVersion("4.4.0.0")]
-[assembly: AssemblyTitle ("Mono.WebServer.XSP")]
+// [assembly: AssemblyVersion("4.4.0.0")]
+// [assembly: AssemblyTitle ("Mono.WebServer.XSP")]
 [assembly: AssemblyDescription ("Minimalistic web server for testing System.Web")]
 [assembly: AssemblyCopyright ("(C) 2002-2011 Novell, Inc.")]
-[assembly: AssemblyCompany ("Novell, Inc.")]
+// [assembly: AssemblyCompany ("Novell, Inc.")]
+
 [assembly: InternalsVisibleTo ("Mono.WebServer.Test, PublicKey = 0024000004800000940000000602000" +
                                "00024000052534131000400000100010079159977d2d03a8e6bea7a2e74e8d1a" +
                                "fcc93e8851974952bb480a12c9134474d04062447c37e0e68c080536fcf3c3fb" +

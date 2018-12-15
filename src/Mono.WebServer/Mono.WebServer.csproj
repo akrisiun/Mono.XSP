@@ -1,17 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-<!-- <Project Sdk="Microsoft.NET.Sdk"> 
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+  <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  -->
+  <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net46'">
-    <DefineConstants>TRACE;DEBUG;NET46;NETCORE;</DefineConstants>
-  </PropertyGroup>
--->
-  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
     <OutputType>Library</OutputType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    
     <ProductVersion>10.0.0</ProductVersion>
     <Version>4.4.0.0</Version>
     <RootNamespace>Mono.WebServer</RootNamespace>
@@ -23,12 +27,20 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
     -->
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\mono.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net46'">
+    <DefineConstants>TRACE;DEBUG;NET46;NETCORE;</DefineConstants>
+  </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin</OutputPath>
+    <OutputPath>..\..\..\..\lib\mono\4.5</OutputPath>
+    
     <!-- <OutputPath>bin\Debug</OutputPath> -->
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -125,5 +137,5 @@
   <ItemGroup>
     <None Include="mono.snk" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!--<Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />-->
 </Project>

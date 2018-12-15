@@ -41,6 +41,7 @@ using System.Security;
 
 namespace Mono.WebServer.XSP
 {
+    /// Mono.WebServer.XSP.Server.Main
     public class Server : MarshalByRefObject
     {
         static RSA key;

@@ -1,13 +1,11 @@
-* Welcome to XSP!
------------------
+# Welcome to XSP!
 
 	The XSP server is a small web server that hosts the Mono
     System.Web classes for running what is commonly known as ASP.NET.
 
     See INSTALL for details on how to install XSP.
 
-* Directory Layout
-------------------
+### Directory Layout
 
 	doc/
 		Some documentation about the XSP server. 
