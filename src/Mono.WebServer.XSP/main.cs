@@ -202,6 +202,7 @@ namespace Mono.WebServer.XSP
                 Logger.Write(LogLevel.Notice, $"corlib: {typeof(System.AppDomain).Assembly.Location}");
                 // C:\WINDOWS\Microsoft.Net\assembly\GAC_MSIL\System.Core\v4.0_4.0.0.0__b77a5c561934e089\System.Core.dll
                 Logger.Write(LogLevel.Notice, $"Core: {typeof(System.Linq.Enumerable).Assembly.Location}");
+                Logger.Write(LogLevel.Notice, $"Conf: {typeof(System.Configuration.ConfigurationManager).Assembly.Location}");
                 Logger.Write(LogLevel.Notice, typeof(System.Web.HttpApplication).Assembly.Location);
                 Logger.Write(LogLevel.Notice, typeof(Mono.Security.Interface.Alert).Assembly.Location);
 
