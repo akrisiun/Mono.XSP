@@ -65,7 +65,13 @@
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="Mono.Posix">
-      <HintPath>..\..\lib\Mono.Posix.dll</HintPath>
+      <HintPath>..\..\..\..\lib\mono\4.5\Mono.Posix.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>..\..\..\..\lib\mono\4.5\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.WebServer">
+      <HintPath>..\..\..\..\lib\mono\4.5\Mono.WebServer.dll</HintPath>
     </Reference>
     <!--
     <PackageReference Include="Mono.Security" Version="5.4.0.201" />
